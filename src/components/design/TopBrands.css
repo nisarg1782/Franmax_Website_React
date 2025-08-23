@@ -1,0 +1,194 @@
+/* src/components/design/PremiumBrands.css */
+
+/* Wrapper */
+.syb-wrapper {
+  padding: 50px 20px;
+  max-width: 1200px;
+  margin: auto;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff;
+}
+
+/* Heading Row */
+.syb-heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.syb-heading {
+  font-size: 28px;
+  font-weight: 700;
+  color: #060644;
+}
+
+.syb-view-all {
+  font-size: 15px; /* Adjusted to 15px as per your request */
+  color: #f5842c; /* Changed to #f5842c */
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #f5842c; /* Added border */
+  padding: 6px 14px; /* Added padding */
+  border-radius: 6px; /* Added border-radius */
+  transition: 0.3s;
+}
+
+.syb-view-all:hover {
+  background-color: #f5842c; /* Hover background */
+  color: #fff; /* Hover text color */
+}
+
+/* Carousel Container - This is key for the sliding effect */
+.syb-carousel-container {
+  overflow: hidden; /* Hides cards outside the visible area */
+  /* Calculate max-width for exactly 3 cards + 2 gaps (280px card, 15px gap) */
+  max-width: calc(3 * 280px + 2 * 15px);
+  margin: 0 auto; /* Center the carousel viewport */
+}
+
+/* Grid Layout - Now handles the full row of cards */
+.syb-grid {
+  display: flex;
+  flex-direction: row; /* Ensure cards stay in a single row */
+  flex-wrap: nowrap; /* Prevent wrapping */
+  justify-content: flex-start; /* Align to start for translateX */
+  gap: 15px; /* Gap between cards */
+  transition: transform 0.5s ease-in-out; /* Smooth slide animation */
+}
+
+/* Individual Card */
+.syb-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
+  min-width: 280px; /* Use min-width to prevent shrinking in the flex container */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  box-sizing: border-box; /* Include padding/border in card width */
+}
+
+.syb-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Image Wrap */
+.syb-img-wrap {
+  height: 150px;
+  background: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.syb-img-wrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Card Content */
+.syb-content {
+  padding: 16px;
+  text-align: center;
+  flex-grow: 1; /* Allows content to expand to fill space */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.syb-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+/* Detail Fields */
+.syb-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.biz-field {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.label {
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.value {
+  flex: 2;
+  text-align: right;
+  color: #555;
+  word-break: break-word;
+}
+
+/* Button */
+.syb-btn {
+  margin-top: auto; /* Push button to the bottom */
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid #f97316;
+  color: #f97316;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  width: fit-content; /* Make button only as wide as its content */
+  margin-left: auto;
+  margin-right: auto; /* Center the button */
+}
+
+.syb-btn:hover {
+  background: #f97316;
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .syb-carousel-container {
+    /* Adjust for 2 cards + 1 gap */
+    max-width: calc(2 * 280px + 1 * 15px);
+  }
+}
+
+@media (max-width: 768px) {
+  .syb-carousel-container {
+    /* Adjust for 1 card only */
+    max-width: 280px;
+  }
+  .syb-heading-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 500px) {
+  .syb-carousel-container {
+    /* Allow single card to take up more width on very small screens */
+    max-width: calc(100% - 40px); /* Account for wrapper padding */
+  }
+  .syb-card {
+    min-width: 100%; /* Make card nearly full width */
+  }
+  .syb-wrapper {
+    padding: 30px 20px;
+  }
+  .syb-heading {
+    font-size: 24px;
+  }
+}

@@ -38,7 +38,7 @@ function HomePage() {
       <SellYourBusinessCards />
       <LeasePropertiesDisplay />
       <NewsSection />
-      <YoutubeSection />
+      {/* <YoutubeSection /> */}
     </div>
   );
 }

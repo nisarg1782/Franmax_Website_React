@@ -13,7 +13,7 @@ const SellBusinessCards = () => {
     fetch(getApiUrl("get-sell-business.php"))
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.cards)) {
+        if (data.success && Array.isArray(data.cards) && data.cards.length > 0) {
           const unique = [];
           const seen = new Set();
           for (const card of data.cards) {
@@ -31,6 +31,8 @@ const SellBusinessCards = () => {
   }, []);
 
   useEffect(() => {
+    if (cards.length === 0) return;
+
     const interval = setInterval(() => {
       setVisibleCards((prev) => {
         if (cards.length === 0) return [];
@@ -51,6 +53,9 @@ const SellBusinessCards = () => {
   const handleKnowMore = (uuid) => {
     navigate(`/business/${uuid}`);
   };
+
+  // Only render title and grid if there are cards
+  if (cards.length === 0) return null;
 
   return (
     <div className="syb-wrapper">

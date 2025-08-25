@@ -8,6 +8,7 @@ import BrandFormModal from './RegisterModal/BrandFormModal';
 import PartnerFormModal from './RegisterModal/PartnerFormModal';
 import LeasingFormModal from './RegisterModal/LeasingFormModal'; // ✅ NEW
 import './design/Header.css';
+import logo from '../assets/logo/Franmax_logo.png';
 
 export default function TopBar() {
   const [showLogin, setShowLogin] = useState(false);
@@ -52,19 +53,11 @@ export default function TopBar() {
       <div className="top-bar">
         <div className="top-left">
           <img
-            src="https://www.franmaxindia.com/images/black-pngb-logo-fx.png"
+            src={logo}
             alt="Logo"
             className="logo-img"
           />
         </div>
-
-        <div className="top-center">
-          <h2>
-            India’s #1 <br />
-            <span>Franchise Marketplace</span>
-          </h2>
-        </div>
-
         <div className="top-right">
           <button className="top-link-button" onClick={handleOpenRegister}>
             <FaUserPlus /> Register

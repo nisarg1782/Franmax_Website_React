@@ -3,6 +3,7 @@ import './PricingPlans.css';
 import { FaCheckCircle } from 'react-icons/fa';
 import BrandSidebar from './BrandSidebar';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../utils/api';
 
 // Razorpay script loader
 const loadRazorpay = (src) => {
@@ -38,7 +39,7 @@ const BrandPricingPlans = () => {
 
   // Fetch brand plans
   useEffect(() => {
-    fetch('http://localhost/react-api/get-plans-with-benefits.php')
+    fetch(getApiUrl('get-plans-with-benefits.php'))
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -82,7 +83,7 @@ const BrandPricingPlans = () => {
           try {
             const paymentDateTime = new Date().toISOString();
 
-            const verifyResp = await fetch('http://localhost/react-api/submit_brand_payment.php', {
+            const verifyResp = await fetch(getApiUrl('submit_brand_payment.php'), {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getApiUrl } from '../utils/api';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -59,7 +60,7 @@ const ContactUs = () => {
     if (!validate()) return;
 
     try {
-      const res = await fetch('http://localhost/react-api/contact-submit.php', {
+      const res = await fetch(getApiUrl('contact-submit.php'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

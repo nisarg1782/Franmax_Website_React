@@ -84,7 +84,7 @@ const BrandInquiries = ({ openLoginModal }) => {
   // Load inquiries only if premium
   useEffect(() => {
     if (brandId && isPremium === true) {
-      fetch(`http://localhost/react-api/get_inquiries_by_brand.php?brand_id=${brandId}`)
+      fetch(getApiUrl(`get_inquiries_by_brand.php?brand_id=${brandId}`))
         .then(res => res.json())
         .then(data => setInquiries(data))
         .catch(err => console.error('Failed to load inquiries', err));

@@ -13,6 +13,7 @@ const TopBrands = ({
   const [visibleIndex, setVisibleIndex] = useState(0);
   const intervalRef = useRef(null);
   const cardGridRef = useRef(null);
+  const navigate = useNavigate(); // ✅ useNavigate initialized
 
   // ... (useEffect hooks for fetching, carousel, and transform) ...
   useEffect(() => {
@@ -59,12 +60,18 @@ const TopBrands = ({
       cardGridRef.current.style.transform = `translateX(-${offset}px)`;
     }
   }, [visibleIndex, brands]);
-  
 
+  // ✅ Added missing function
+  const handleKnowMore = (register_id) => {
+    navigate(`/brand/${register_id}`);
+  };
   return (
     <div className="syb-wrapper">
       <div className="syb-heading-row">
-        <h2 className="syb-heading">{sectionTitle}</h2>
+        {
+          brands.length >= 1 && <h2 className="syb-heading">{sectionTitle}</h2>
+        }
+
         {brands.length >= 1 && (
           <a href={viewAllLink} className="syb-view-all">View All</a>
         )}
@@ -96,9 +103,12 @@ const TopBrands = ({
                     <span className="value">{brand.total_outlets}</span>
                   </div>
                 </div>
-                <button className="syb-btn"
-               
-                >Know More</button>
+                <button
+                  className="syb-btn"
+                  onClick={() => handleKnowMore(brand.id)}
+                >
+                  Know More
+                </button>
               </div>
             </div>
           ))}

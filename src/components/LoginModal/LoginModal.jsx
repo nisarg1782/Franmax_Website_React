@@ -7,7 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getApiUrl } from '../../utils/api';
 
 export default function LoginModal({ isOpen, onClose, openRegister }) {
-    const [email, setEmail] = useState('');
+    // Renamed the state variable from 'email' to 'username' for clarity
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
@@ -16,7 +17,8 @@ export default function LoginModal({ isOpen, onClose, openRegister }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const validationErrors = validateLogin({ email, password });
+        // Updated the validation function call to use 'username'
+        const validationErrors = validateLogin({ username, password });
 
         if (Object.keys(validationErrors).length > 0) {
             Object.values(validationErrors).forEach(err => toast.error(err));
@@ -24,7 +26,9 @@ export default function LoginModal({ isOpen, onClose, openRegister }) {
         }
 
         try {
-            const payload = { email, password };
+            // Updated the payload to correctly send the 'username'
+            const payload = { user_name: username, password };
+            
             const res = await fetch(getApiUrl('validate-login.php'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -68,10 +72,12 @@ export default function LoginModal({ isOpen, onClose, openRegister }) {
                             <div className="input-group">
                                 <span className="icon">👤</span>
                                 <input
-                                    type="email"
-                                    placeholder="Email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    type="text"
+                                    placeholder="User Name"
+                                    // Binds the input value to the new 'username' state
+                                    value={username}
+                                    // Updates the 'username' state on change
+                                    onChange={(e) => setUsername(e.target.value)}
                                 />
                             </div>
                             <div className="input-group password-group">
@@ -115,7 +121,7 @@ export default function LoginModal({ isOpen, onClose, openRegister }) {
                         <div className="why-register">
                             <h4>Why should I register?</h4>
                             <p>
-                                Gain access to <strong>20,000+ franchise opportunities</strong> across Gujarat and India.
+                                Gain access to <strong>2,000+ franchise opportunities</strong> across Gujarat and India.
                             </p>
                             <p>
                                 Join a dynamic network of <strong>investors, experts, and entrepreneurs</strong> to grow your vision.

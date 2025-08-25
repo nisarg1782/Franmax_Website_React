@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BusinessCard from './BusinessCard';
 // import InquiryForm from './EnquiryForm'; // Uncomment if using
 import './design/BusinessList.css';
-import { getApiUrl } from '../utils/api';
+import { getApiUrl,getImageUrl} from '../utils/api';
 const BusinessList = () => {
   const [businesses, setBusinesses] = useState([]);
   const [visibleCount, setVisibleCount] = useState(4);

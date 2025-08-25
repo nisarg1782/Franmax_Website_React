@@ -3,6 +3,7 @@ import { X, User, GraduationCap, DollarSign, Briefcase } from 'lucide-react';
 
 // NOTE: We assume that the user will handle the CSS for this component separately.
 import './EditProfile.css';
+import { getApiUrl } from '../utils/api';
 
 const tabs = [
   { id: 'personal', name: 'Personal Info', icon: <User size={18} /> },
@@ -151,7 +152,7 @@ export default function App() {
       try {
         setLoadingStates(true);
         // Using the local API endpoint now
-        const res = await fetch('http://localhost/react-api/get-indian-states.php');
+        const res = await fetch(getApiUrl('get-indian-states.php'));
         const data = await res.json();
         setStates(data); // Expected format: [{id:1,name:"..."}, ...]
       } catch (error) {
@@ -175,7 +176,7 @@ export default function App() {
         setLoadingCities(true);
         // Using the local API endpoint with the state_id parameter
         const res = await fetch(
-          `http://localhost/react-api/get-cities.php?state_id=${formData.state.id}`
+          getApiUrl(`get-cities.php?state_id=${formData.state.id}`)
         );
         const data = await res.json();
         setCities(data); // Expected format: [{id:1,name:"..."}, ...]
@@ -224,7 +225,7 @@ export default function App() {
     console.log(payload)
     try {
       // Send the data to a single API endpoint
-      const res = await fetch('http://localhost/react-api/submit-user-profile.php', {
+      const res = await fetch(getApiUrl('submit-user-profile.php'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

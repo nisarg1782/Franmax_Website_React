@@ -6,16 +6,17 @@ import Sidebar from './Sidebar';
 import { FaPlus, FaEdit, FaSave, FaTimes, FaTrash } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getApiUrl ,getImageUrl } from '../utils/api';
 
 // Utility function to get API URL
-const getApiUrl = (endpoint) => `http://localhost/react-api/${endpoint}`;
+// const getApiUrl = (endpoint) => `http://localhost/react-api/${endpoint}`;
 
 export default function NewsletterTable() {
     const [newsletters, setNewsletters] = useState([]);
     const [expandedId, setExpandedId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
     // State for editing functionality
     const [editingNewsId, setEditingNewsId] = useState(null);
     const [editingNewsData, setEditingNewsData] = useState({ title: '', description: '' });
@@ -94,7 +95,7 @@ export default function NewsletterTable() {
     const handleCancelDelete = () => {
         setDeletingNewsId(null); // Close the confirmation modal
     };
-    
+
     // Unified function to handle add, edit, and delete API calls
     const manageNews = async (formData) => {
         setLoading(true);
@@ -152,7 +153,7 @@ export default function NewsletterTable() {
                 throw new Error('Network response was not ok');
             }
             const data = await res.json();
-            
+
             if (data.success) {
                 setNewsletters(data.news);
             } else {
@@ -260,13 +261,13 @@ export default function NewsletterTable() {
                                                 <td colSpan="4">
                                                     <div className="details-box">
                                                         {news.image && (
-                                                            <img 
-                                                                src={`http://localhost/react-api/${news.image}`} 
-                                                                alt={news.title} 
-                                                                className="newsletter-image" 
+                                                            <img
+                                                                src={getImageUrl(`${news.image}`)}
+                                                                alt={news.title}
+                                                                className="newsletter-image"
                                                             />
                                                         )}
-                                                        <div 
+                                                        <div
                                                             className="newsletter-description-html"
                                                             dangerouslySetInnerHTML={{ __html: news.description }}
                                                         />
@@ -329,7 +330,7 @@ export default function NewsletterTable() {
                     </div>
                 </div>
             )}
-            
+
             {/* Modal for delete confirmation */}
             {deletingNewsId && (
                 <div className="modal-overlay">

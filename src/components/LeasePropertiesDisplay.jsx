@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './design/LeasePropertiesDisplay.css';
-import PropertyList from './PropertyList'; // Assuming you have a PropertyList component
-import { getImageUrl , getApiUrl } from '../utils/api'; // Import the utility to get image URLs
-
+import { getImageUrl , getApiUrl } from '../utils/api';
 
 const LeasePropertiesDisplay = () => {
   const [properties, setProperties] = useState([]);
@@ -14,14 +12,14 @@ const LeasePropertiesDisplay = () => {
     fetch(getApiUrl('get-lease-properties.php'))
       .then(res => res.json())
       .then(data => {
-        if (data.status === 'success' && Array.isArray(data.data)) {
+        if (data.status === 'success' && Array.isArray(data.data) && data.data.length > 0) {
           const uniqueProps = data.data.filter(
             (prop, index, self) =>
               prop &&
               prop.image_path &&
               index === self.findIndex(p => p.image_path === prop.image_path)
           );
-          const shuffled = data.data.sort(() => Math.random() - 0.5);
+          const shuffled = uniqueProps.sort(() => Math.random() - 0.5);
           setProperties(shuffled);
 
           // Set initial 3 cards
@@ -49,12 +47,15 @@ const LeasePropertiesDisplay = () => {
     return () => clearInterval(intervalRef.current);
   }, [properties]);
 
+  // If no properties, render nothing
+  if (properties.length === 0) return null;
+
   return (
     <div className="lease-wrapper">
-    <div className="lease-header">
-  <h2 className="lease-heading">Exploring Properties</h2>
-  <a href="/all-lease-properties" className="view-all-link">View All</a>
-</div>
+      <div className="lease-header">
+        <h2 className="lease-heading">Exploring Properties</h2>
+        <a href="/all-lease-properties" className="view-all-link">View All</a>
+      </div>
 
       <div className="lease-card-grid">
         {visibleCards.map((prop, i) => (
@@ -64,15 +65,13 @@ const LeasePropertiesDisplay = () => {
                 src={getImageUrl(prop.image_path)}
                 alt="Property"
               />
-              
             </div>
-          
+
             <div className="lease-info">
-                 <h3 className="biz-title">{prop.property_type}</h3>
+              <h3 className="biz-title">{prop.property_type}</h3>
               <div className="lease-meta">
                 <p><span className="label">Expected Rent:</span> <span>₹{prop.expected_rent}</span></p>
                 <p><span className="label">Area:</span> <span>{prop.sqft} sqft</span></p>
-              
                 <p><span className="label">Floor:</span> <span>{prop.floor_type}</span></p>
                 <p><span className="label">City:</span> <span>{prop.city_name}</span></p>
               </div>

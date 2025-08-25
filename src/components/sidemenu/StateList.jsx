@@ -1,6 +1,34 @@
+
 import React, { useEffect, useState } from 'react';
-import { getApiUrl } from '../../utils/api';
-export default function StateCityDrawer() {
+
+// ===== Slider Component =====
+function Slider({ stateId, cityId }) {
+  const [slides, setSlides] = useState([]);
+
+  useEffect(() => {
+    if (stateId) {
+      let url = `http://localhost/react-api/get-slider.php?state_id=${stateId}`;
+      if (cityId) url += `&city_id=${cityId}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => setSlides(data || []));
+    }
+  }, [stateId, cityId]);
+
+  if (!slides.length) return <div>No slides available</div>;
+
+  return (
+    <div className="slider">
+      {slides.map((slide, idx) => (
+        <img key={idx} src={slide.image} alt={slide.name} />
+      ))}
+    </div>
+  );
+}
+
+// ===== Drawer Component =====
+function StateCityDrawer({ onStateSelect, onCitySelect }) {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState({});
   const [selectedState, setSelectedState] = useState(null);
@@ -13,11 +41,12 @@ export default function StateCityDrawer() {
   const [cityVisibleCount, setCityVisibleCount] = useState(6);
 
   useEffect(() => {
-    fetch(getApiUrl('get-indian-states.php'))
+    fetch('http://localhost:80/react-api/get-indian-states.php')
       .then(res => res.json())
       .then(data => Array.isArray(data) && setStates(data));
   }, []);
 
+  // ----- State selection -----
   const handleStateClick = (state) => {
     setSelectedState(state);
     setActivePanel('city');
@@ -25,19 +54,39 @@ export default function StateCityDrawer() {
     setCityVisibleCount(6);
 
     if (!cities[state.id]) {
-      fetch(getApiUrl(`get-cities.php?state_id=${state.id}`))
+      fetch(`http://localhost/react-api/get-cities.php?state_id=${state.id}`)
         .then(res => res.json())
-        .then(data => {
-          setCities(prev => ({ ...prev, [state.id]: data }));
-        });
+        .then(data => setCities(prev => ({ ...prev, [state.id]: data })));
     }
+
+    // Pass stateId to parent immediately
+    if (onStateSelect) onStateSelect(state.id);
+
+    // Update URL for reference
+    const url = new URL(window.location);
+    url.searchParams.set('state_id', state.id);
+    url.searchParams.delete('city_id');
+    window.history.replaceState({}, '', url);
+  };
+
+  // ----- City selection -----
+  const handleCityClick = (city) => {
+    if (onCitySelect && selectedState) {
+      onCitySelect({ stateId: selectedState.id, cityId: city.id });
+    }
+
+    // Update URL with both state and city
+    const url = new URL(window.location);
+    url.searchParams.set('state_id', selectedState.id);
+    url.searchParams.set('city_id', city.id);
+    window.history.replaceState({}, '', url);
   };
 
   const goBack = () => {
     setActivePanel('state');
     setSelectedState(null);
-    setStateSearch('');
-    setStateVisibleCount(6);
+    setCitySearch('');
+    setCityVisibleCount(6);
   };
 
   // Filter logic
@@ -63,7 +112,7 @@ export default function StateCityDrawer() {
           value={stateSearch}
           onChange={(e) => {
             setStateSearch(e.target.value);
-            setStateVisibleCount(6); // reset
+            setStateVisibleCount(6);
           }}
         />
         <ul className="drawer-list">
@@ -100,8 +149,8 @@ export default function StateCityDrawer() {
         />
         <ul className="drawer-list">
           {visibleCities.map(city => (
-            <li key={city.id}>
-              <a href="#">{city.name}</a>
+            <li key={city.id} onClick={() => handleCityClick(city)}>
+              <a href="">{city.name}</a>
             </li>
           ))}
         </ul>
@@ -113,6 +162,29 @@ export default function StateCityDrawer() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+// ===== Parent Component =====
+export default function App() {
+  const [selectedState, setSelectedState] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
+
+  return (
+    <div>
+      <StateCityDrawer
+        onStateSelect={(stateId) => {
+          setSelectedState(stateId);
+          setSelectedCity(null);
+        }}
+        onCitySelect={({ stateId, cityId }) => {
+          setSelectedState(stateId);
+          setSelectedCity(cityId);
+        }}
+      />
+
+      <Slider stateId={selectedState} cityId={selectedCity} />
     </div>
   );
 }

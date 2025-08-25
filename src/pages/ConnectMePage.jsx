@@ -1,16 +1,15 @@
-// src/components/Shared/ConnectMeModal.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getApiUrl } from "../utils/api";
-import "./ConnectMePage.css"; // Keep your merged CSS here
+import "./ConnectMePage.css";
 
 const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
-  const id = brandId || productId; // Use whichever ID is passed
-
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [loadingStates, setLoadingStates] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverMessage, setServerMessage] = useState("");
 
   const [form, setForm] = useState({
     name: "",
@@ -31,12 +30,13 @@ const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
   useEffect(() => {
     let active = true;
     setLoadingStates(true);
-    axios
-      .get(getApiUrl("get-indian-states.php"))
-      .then((res) => active && setStates(res.data || []))
+    axios.get(getApiUrl("get-indian-states.php"))
+      .then((res) => {
+        if (active) setStates(res.data || []);
+      })
       .catch((err) => console.error("Error fetching states:", err))
       .finally(() => active && setLoadingStates(false));
-    return () => (active = false);
+    return () => { active = false; };
   }, []);
 
   // Fetch cities when state changes
@@ -44,17 +44,16 @@ const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
     if (!form.stateId) return;
     let active = true;
     setLoadingCities(true);
-    axios
-      .get(`${getApiUrl("get-cities.php")}?state_id=${form.stateId}`)
+    axios.get(`${getApiUrl("get-cities.php")}?state_id=${form.stateId}`)
       .then((res) => {
         if (active) {
           setCities(res.data || []);
-          updateForm("cityId", "");
+          updateForm("cityId", ""); // reset city
         }
       })
       .catch((err) => console.error("Error fetching cities:", err))
       .finally(() => active && setLoadingCities(false));
-    return () => (active = false);
+    return () => { active = false; };
   }, [form.stateId]);
 
   const validate = () => {
@@ -69,16 +68,41 @@ const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setServerMessage("");
     if (!validate()) return;
 
-    const payload = { ...form, brandId: brandId || null, productId: productId || null };
-    console.log("Form Submitted:", payload);
+    setSubmitting(true);
 
-    // axios.post(getApiUrl("submit-form.php"), payload) can be used later
+    const payload = {
+      ...form,
+      stateId: parseInt(form.stateId, 10),
+      cityId: parseInt(form.cityId, 10),
+      brandId: brandId || 0,
+      productId: productId || 0,
+    };
 
-    onClose(); // Close modal after submit
+    console.log("Sending payload:", payload);
+
+    try {
+      const res = await axios.post(getApiUrl("connect-me.php"), payload, {
+        headers: { "Content-Type": "application/json" },
+      });
+      console.log("Server response:", res.data);
+
+      if (res.data.success) {
+        setServerMessage("Your request has been submitted successfully!");
+        setForm({ name: "", email: "", contact: "", stateId: "", cityId: "", message: "" });
+      } else {
+        setServerMessage(res.data.error || "Failed to submit.");
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      setServerMessage("Server error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (!show) return null;
@@ -88,6 +112,7 @@ const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <button className="close-btn" onClick={onClose}>&times;</button>
         <h2>Connect with Us</h2>
+        {serverMessage && <p className="server-message">{serverMessage}</p>}
         <form onSubmit={handleSubmit} className="connect-form">
           <label>
             Name
@@ -164,7 +189,9 @@ const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
             {errors.message && <span className="error">{errors.message}</span>}
           </label>
 
-          <button type="submit" className="submit-btn">Submit</button>
+          <button type="submit" className="submit-btn" disabled={submitting}>
+            {submitting ? "Submitting..." : "Submit"}
+          </button>
         </form>
       </div>
     </div>

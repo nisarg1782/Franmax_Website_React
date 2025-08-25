@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { getImageUrl } from '../utils/api'; // ✅ import the utility
 
 const BusinessCard = ({ business }) => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const BusinessCard = ({ business }) => {
     <div className="franchise-card">
       <div className="card-img-box">
         <img
-          src={business.image || "/placeholder.jpg"}
+          src={getImageUrl(business.image)|| "/placeholder.jpg"}
           alt={business.business_name || "Business"}
           className="card-img"
         />

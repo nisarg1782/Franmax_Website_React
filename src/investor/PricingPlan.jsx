@@ -3,6 +3,7 @@ import './PricingPlan.css';
 import { FaCheckCircle } from 'react-icons/fa';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../utils/api';
 
 // Razorpay script loader
 const loadRazorpay = (src) => {
@@ -38,7 +39,7 @@ const PricingPlans = () => {
 
   // Fetch plans
   useEffect(() => {
-    fetch('http://localhost/react-api/get-investor-plan-benifits.php')
+    fetch(getApiUrl('get-investor-plan-benifits.php'))
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -82,7 +83,7 @@ const PricingPlans = () => {
           try {
             const paymentDateTime = new Date().toISOString();
 
-            const verifyResp = await fetch('http://localhost/react-api/submit_investor_payment.php', {
+            const verifyResp = await fetch(getApiUrl('submit_investor_payment.php'), {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

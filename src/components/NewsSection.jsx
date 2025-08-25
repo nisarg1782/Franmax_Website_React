@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './design/NewsSection.css';
 import NewsModal from './NewsModal';
-import { getApiUrl } from '../utils/api';
+import { getApiUrl, getImageUrl } from '../utils/api';
 
 const NewsSection = () => {
   const [news, setNews] = useState([]);
@@ -63,7 +63,10 @@ const NewsSection = () => {
         {getVisibleNews().map((item, index) => (
           <div className="news-card" key={index}>
             <div className="news-img">
-              <img src={item.image} alt={item.title} />
+              <div className="image-wrapper">
+                <img src={getImageUrl(item.image)} alt={item.title || "Brand Image"} />
+              </div>
+
             </div>
             <div className="news-content">
               <h3 className="news-title">{item.title}</h3>

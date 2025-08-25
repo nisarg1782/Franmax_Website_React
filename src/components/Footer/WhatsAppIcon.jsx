@@ -1,6 +1,6 @@
-import React from 'react';
-import '../design/WhatsAppIcon.css';
-import { FaWhatsapp } from 'react-icons/fa';
+import React from "react";
+import "../design/WhatsAppIcon.css";
+import { FaWhatsapp } from "react-icons/fa";
 
 const WhatsAppIcon = () => {
   return (
@@ -12,6 +12,7 @@ const WhatsAppIcon = () => {
       aria-label="Chat on WhatsApp"
     >
       <FaWhatsapp className="whatsapp-icon-svg" />
+      <span className="whatsapp-text">Chat with me</span>
     </a>
   );
 };

@@ -40,7 +40,7 @@ const FilterBar = ({ filters, onChange }) => {
   // Load cities based on stateId
   useEffect(() => {
     if (filters.stateId) {
-      fetch(`http://localhost/react-api/get-cities.php?state_id=${filters.stateId}`)
+      fetch(getApiUrl(`get-cities.php?state_id=${filters.stateId}`))
         .then(res => res.json())
         .then(data => setCities(data))
         .catch(err => console.error('City load error:', err));

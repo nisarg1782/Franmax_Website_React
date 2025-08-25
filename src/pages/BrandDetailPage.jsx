@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import "./BrandDetailPage.css";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import ConnectMeModal from "./ConnectMePage.jsx"; // Import the new modal component
+import ConnectMeModal from "./ConnectMePage.jsx";
+import { getApiUrl, getImageUrl } from "../utils/api.js";
+import { useParams } from 'react-router-dom';
+
 
 // Base URL for images
-const IMAGE_BASE_URL = "http://localhost/react-api/uploads/";
+const IMAGE_BASE_URL = getImageUrl("");
 
-const BrandDetailPage = ({ productId = 7 }) => {
+const BrandDetailPage = () => {
+  const { id } = useParams();
   const [brandData, setBrandData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,8 +22,13 @@ const BrandDetailPage = ({ productId = 7 }) => {
   useEffect(() => {
     const fetchBrandData = async () => {
       try {
+        if (!id) {
+          setLoading(false);
+          return;
+        }
+
         const response = await fetch(
-          `http://localhost/react-api/get_brand_details.php?product_id=${productId}`
+          getApiUrl(`get_brand_details.php?product_id=${id}`)
         );
         const apiResponse = await response.json();
 
@@ -37,7 +46,7 @@ const BrandDetailPage = ({ productId = 7 }) => {
     };
 
     fetchBrandData();
-  }, [productId]);
+  }, [id]);
 
   // Set the initial main image once data is loaded
   useEffect(() => {
@@ -91,6 +100,17 @@ const BrandDetailPage = ({ productId = 7 }) => {
     },
   ];
 
+  // ------------------------------------------
+  // Data Transformation for Expansion Map
+  // ------------------------------------------
+  const transformedExpansions = brandData.expansions && brandData.expansions.length > 0
+    ? brandData.expansions[0].state_names.map(stateName => ({
+        state: stateName,
+        cities: brandData.expansions[0].city_names,
+      }))
+    : [];
+
+
   return (
     <div className="brand-detail-page">
       {/* Connect Me Button */}
@@ -126,7 +146,6 @@ const BrandDetailPage = ({ productId = 7 }) => {
             ))}
           </div>
         </div>
-
         <div className="main-details">
           <h1>{brandData.name}</h1>
           <p className="short-desc">
@@ -167,15 +186,45 @@ const BrandDetailPage = ({ productId = 7 }) => {
 
       {/* Brand Details */}
       <section className="brand-details">
-        <h2>About {brandData.name}</h2>
-        <p>
-          Established in {brandData.master_unit_details?.start_year || "recent years"}, with{" "}
-          {brandData.total_outlets} outlets.
-        </p>
-        <p>
-          Franchise partners receive full support including site selection,
-          training, marketing, and ongoing assistance.
-        </p>
+        {/* ===== About Section ===== */}
+        <section className="about-section">
+          <h2>About {brandData.company_name || brandData.name}</h2>
+
+          <p className="about-description">
+            {brandData.description || 
+              "We are a growing brand committed to delivering quality and support to our franchise partners."}
+          </p>
+
+          <p className="about-intro">
+            Established in <span>{brandData.master_unit_details?.start_year || "recent years"}</span>, 
+            with <span>{brandData.total_outlets || "multiple"}</span> outlets across India.
+          </p>
+
+          <div className="about-grid">
+            <div className="about-card">
+              <h3>Business Information</h3>
+              <ul>
+                <li><strong>Head Office:</strong> {brandData.address || "Information not available"}</li>
+                <li><strong>Franchise-owned outlets:</strong> {brandData.franchise_owned_outlets || "N/A"}</li>
+                <li><strong>Company-owned outlets:</strong> {brandData.company_owned_outlets || "N/A"}</li>
+                <li><strong>Franchise years:</strong> {brandData.franchise_years || "N/A"} years</li>
+                <li><strong>Term renewable:</strong> {brandData.is_term_renewable === "Yes" ? "Yes" : "No"}</li>
+              </ul>
+            </div>
+
+            <div className="about-card">
+              <h3>Support & Resources</h3>
+              <ul>
+                <li><strong>Training provided:</strong> {brandData.training_provided === "Yes" ? "Available" : "Not Available"}</li>
+                <li><strong>Marketing materials:</strong> {brandData.marketing_materials_available === "Yes" ? "Provided" : "Not Provided"}</li>
+                <li><strong>Field assistance:</strong> {brandData.field_assistance_available === "Yes" ? "Available" : "Not Available"}</li>
+                <li><strong>Head office assistance:</strong> {brandData.head_office_assistance === "Yes" ? "Available" : "Not Available"}</li>
+                <li><strong>Operating manuals:</strong> {brandData.has_operating_manuals === "Yes" ? "Available" : "Not Available"}</li>
+                <li><strong>IT systems included:</strong> {brandData.it_systems_included === "Yes" ? "Included" : "Not Included"}</li>
+              </ul>
+            </div>
+          </div>
+        </section>
 
         {/* ===== Unit Details Section ===== */}
         <section className="unit-details-section">
@@ -186,54 +235,36 @@ const BrandDetailPage = ({ productId = 7 }) => {
             {brandData.single_unit_details && (
               <div className="unit-card single-unit">
                 <h4>Single Unit</h4>
-                <p>
-                  <span>Area Required:</span> {brandData.single_unit_details.area_req}
-                </p>
-                <p>
-                  <span>Investment:</span> ₹
-                  {brandData.single_unit_details.investment}
-                </p>
-                <p>
-                  <span>ROI:</span> {brandData.single_unit_details.roi}%
-                </p>
-                <p>
-                  <span>Payback:</span> {brandData.single_unit_details.payback}{" "}
-                  years
-                </p>
+                <p><span>Area Required:</span> {brandData.single_unit_details.area_req}</p>
+                <p><span>Investment:</span> ₹{brandData.single_unit_details.investment}</p>
+                <p><span>ROI:</span> {brandData.single_unit_details.roi}%</p>
+                <p><span>Payback:</span> {brandData.single_unit_details.payback} years</p>
               </div>
             )}
 
             {/* Master Unit Details */}
-            {brandData.master_unit_details &&
-              brandData.master_unit_details.length > 0 && (
-                <div className="master-unit-section">
-                  <h3>Master Unit Details</h3>
+            {brandData.master_unit_details && brandData.master_unit_details.length > 0 && (
+              <div className="master-unit-section">
+                <h3>Master Unit Details</h3>
 
-                  <div className="master-unit-cards">
-                    {brandData.master_unit_details.map((unit) => (
-                      <div className={`unit-card ${unit.type}`} key={unit.id}>
-                        <h4>
-                          {unit.type === "city_wise" && "City-wise Unit"}
-                          {unit.type === "state_wise" && "State-wise Unit"}
-                          {unit.type === "country_wise" && "Country-wise Unit"}
-                        </h4>
-                        <p>
-                          <span>Area Required:</span> {unit.area_req}
-                        </p>
-                        <p>
-                          <span>Investment:</span> ₹{unit.investment}
-                        </p>
-                        <p>
-                          <span>ROI:</span> {unit.roi}%
-                        </p>
-                        <p>
-                          <span>Payback:</span> {unit.payback} years
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                <div className="master-unit-cards">
+                  {brandData.master_unit_details.map((unit) => (
+                    <div className={`unit-card ${unit.type}`} key={unit.id}>
+                      <h4>
+                        {unit.type === "city_wise" && "City-wise Unit"}
+                        {unit.type === "state_wise" && "State-wise Unit"}
+                        {unit.type === "country_wise" && "Country-wise Unit"}
+                      </h4>
+                      <p><span>Area Required:</span> {unit.area_req}</p>
+                      <p><span>Investment:</span> ₹{unit.investment}</p>
+                      <p><span>ROI:</span> {unit.roi}%</p>
+                      <p><span>Payback:</span> {unit.payback} years</p>
+                    </div>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
+            
             {!brandData.single_unit_details && !brandData.master_unit_details && (
               <p>Unit details not provided.</p>
             )}
@@ -241,41 +272,37 @@ const BrandDetailPage = ({ productId = 7 }) => {
         </section>
       </section>
 
-      {/* --- */}
-      {/* Expansion Map */}
+      {/* ===== Expansion Map ===== */}
+        {/* ===== Expansion Map ===== */}
       <section className="expansion-map">
-        <h2>Expansion Map</h2>
-        <p>Operational outlets across different states and cities:</p>
-        <div className="states-list">
-          {(brandData.expansion_states?.length > 0
-            ? brandData.expansion_states
-            : [
-                { name: "Maharashtra", cities: ["Mumbai", "Pune", "Nagpur"] },
-                {
-                  name: "Karnataka",
-                  cities: ["Bengaluru", "Mysuru", "Mangalore"],
-                },
-                { name: "Delhi", cities: ["New Delhi", "Dwarka", "Rohini"] },
-                {
-                  name: "Tamil Nadu",
-                  cities: ["Chennai", "Coimbatore", "Madurai"],
-                },
-              ]
-          ).map((state, index) => (
-            <div key={index} className="state-card">
-              <h3>{state.name}</h3>
-              {state.cities?.length > 0 ? (
-                <ul>
-                  {state.cities.map((city, idx) => (
-                    <li key={idx}>{city}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No city data available.</p>
-              )}
-            </div>
-          ))}
-        </div>
+        <h2 className="title">🌍 Expansion Map</h2>
+        <p className="subtitle">Our outlets are expanding across these states and cities:</p>
+
+        {transformedExpansions && transformedExpansions.length > 0 ? (
+          <div className="states-list">
+            {transformedExpansions.map((item, index) => (
+              <div key={index} className="state-card">
+                <div className="state-header">
+                  <span className="state-icon">📍</span>
+                  <h3 className="state-name">{item.state || "Unnamed State"}</h3>
+                </div>
+
+                {item.cities && item.cities.length > 0 ? (
+                  <div className="city-list">
+                    {/* The new approach: Join city names with commas */}
+                    <p className="city-names-list">{item.cities.join(", ")}</p>
+                  </div>
+                ) : (
+                  <p className="no-city">No cities listed</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-data-message">
+            <p>No expansion map data available for this brand.</p>
+          </div>
+        )}
       </section>
 
       {/* --- */}
@@ -365,7 +392,7 @@ const BrandDetailPage = ({ productId = 7 }) => {
           show={showConnectModal}
           onClose={() => setShowConnectModal(false)}
           brandId={brandData.register_id}
-          productId={productId} // Pass both IDs for flexibility
+          productId={id} // Pass the ID from the URL to the modal
         />
       )}
     </div>

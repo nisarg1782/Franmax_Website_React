@@ -75,6 +75,7 @@ export default function BrandFormModal({ isOpen, onClose, onBack }) {
 
     const payload = {
       brand_name: form.brand_name,
+      user_name: form.user_name,
       brand_email: form.brand_email,
       brand_mobile: form.brand_mobile,
       brand_password: form.brand_password,
@@ -124,6 +125,15 @@ export default function BrandFormModal({ isOpen, onClose, onBack }) {
                 placeholder="Brand Name"
                 value={form.brand_name}
                 onChange={(e) => setForm({ ...form, brand_name: e.target.value })}
+              />
+            </div>
+             <div className="investor-form-input-with-icon">
+              <FaIndustry className="investor-form-input-icon" />
+              <input
+                type="text"
+                placeholder="User Name"
+                value={form.user_name}
+                onChange={(e) => setForm({ ...form, user_name: e.target.value })}
               />
             </div>
 

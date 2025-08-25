@@ -35,7 +35,7 @@ const BrandSidebar = () => {
           <li>
             <a href="#" onClick={() => {
               localStorage.clear(); // or your logout logic
-              window.location.href = '/login'; // redirect
+              window.location.href = '/'; // redirect
             }}>
               🚪 {isOpen && 'Logout'}
             </a>

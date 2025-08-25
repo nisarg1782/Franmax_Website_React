@@ -35,7 +35,7 @@ const EditBrandModal = ({ brand, onClose, onUpdate }) => {
     // Fetch cities whenever the state_id in the form changes
     useEffect(() => {
         if (form.state_id) {
-            axios.get(`http://localhost/react-api/get-cities.php?state_id=${form.state_id}`)
+            axios.get(getApiUrl(`get-cities.php?state_id=${form.state_id}`))
                 .then(res => setCities(res.data))
                 .catch(err => console.error('Error fetching cities:', err));
         } else {

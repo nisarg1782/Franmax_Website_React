@@ -75,9 +75,10 @@ export default function InvestorFormModal({ isOpen, onClose, onBack }) {
       state_id: selectedState?.value,
       city_id: selectedCity?.value,
       sector_id: selectedSector?.value,
-      user_type: form.user_type
+      user_type: form.user_type,
+      user_name: form.user_name
     };
-
+    console.log('Submitting payload:', payload);
     try {
       const res = await fetch(getApiUrl('register-investor.php'), {
         method: 'POST',
@@ -108,7 +109,6 @@ export default function InvestorFormModal({ isOpen, onClose, onBack }) {
         <div className="investor-modal-box">
           <button className="investor-modal-close-btn" onClick={onClose}>✖</button>
           <h3 className="investor-modal-title">Investor Registration</h3>
-
           <form className="modal-body" onSubmit={handleSubmit}>
             <div className="investor-form-input-with-icon">
               <FaUser className="investor-form-input-icon" />
@@ -120,7 +120,16 @@ export default function InvestorFormModal({ isOpen, onClose, onBack }) {
                 onChange={(e) => setForm({ ...form, investor_name: e.target.value })}
               />
             </div>
-
+            <div className="investor-form-input-with-icon">
+              <FaUser className="investor-form-input-icon" />
+              <input
+                type="text"
+                name="user_name"
+                placeholder="User Name"
+                value={form.user_name}
+                onChange={(e) => setForm({ ...form, user_name: e.target.value })}
+              />
+            </div>
             <div className="investor-form-input-with-icon">
               <FaPhone className="investor-form-input-icon" />
               <input

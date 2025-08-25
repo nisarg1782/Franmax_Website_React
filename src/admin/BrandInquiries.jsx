@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './BrandInquiries.css';
 import Sidebar from './Sidebar';
+import { getApiUrl } from '../utils/api';
 
 export default function InquiryTable() {
   const [inquiries, setInquiries] = useState([]);
@@ -15,7 +16,7 @@ export default function InquiryTable() {
   useEffect(() => {
     const fetchInquiries = async () => {
       try {
-        const res = await fetch('http://localhost/react-api/get-all-brand-inquiries.php');
+        const res = await fetch(getApiUrl('get-all-brand-inquiries.php'));
         const data = await res.json();
         setInquiries(data);
         setLoading(false);

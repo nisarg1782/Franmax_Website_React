@@ -172,3 +172,73 @@
   }
 
 }
+
+
+/* ===== Fixed Height Scroll to Top Button ===== */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 20px;        /* distance from bottom */
+  right: 20px;         /* distance from right */
+  height: 40px;        /* fixed height */
+  min-width: 40px;     /* ensure width accommodates content */
+  background: linear-gradient(135deg, #0077cc, #00aaff);
+  color: #fff;
+  border-radius: 20px; /* half of height for rounded look */
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 0 12px;    /* horizontal padding */
+}
+
+.back-to-top-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #005fa3, #008fcc);
+}
+
+.back-to-top-btn svg {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .back-to-top-btn {
+    height: 36px;
+    min-width: 36px;
+    font-size: 13px;
+    right: 15px;
+    bottom: 18px;
+    border-radius: 18px;
+    padding: 0 10px;
+  }
+
+  .back-to-top-btn svg {
+    font-size: 12px;
+    margin-right: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-to-top-btn {
+    height: 32px;
+    min-width: 32px;
+    font-size: 12px;
+    right: 12px;
+    bottom: 15px;
+    border-radius: 16px;
+    padding: 0 8px;
+  }
+
+  .back-to-top-btn svg {
+    font-size: 11px;
+    margin-right: 3px;
+  }
+}

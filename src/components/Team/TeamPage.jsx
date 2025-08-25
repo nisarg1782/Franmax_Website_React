@@ -1,23 +1,25 @@
 import React from 'react';
 import '../design/TeamPage.css';
 import { FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import VipulImage from '../../assets/logo/vipul.jpg'
+import PriyaImage from '../../assets/logo/priya.jpg'
 
 const team = [
   {
     name: 'Vipul Panchal',
     role: 'Founder & CEO',
-    image: 'https://media.licdn.com/dms/image/v2/D4D03AQGZjbtqxZFN-Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1715690882376?e=2147483647&v=beta&t=kUopH5lG8Ne6igxgbw4LpatPO2TtsJgtw4brMNCntKs',
+    image: VipulImage,
     description: 'Leading the vision of Franmax India with innovation and commitment.',
-    linkedin: 'https://linkedin.com/in/nisargtrivedi',
-    email: 'nisarg@franmaxindia.com',
+    linkedin: 'https://www.linkedin.com/in/vipulpanchalfranmaxindia/',
+    email: 'cmd@franmaxindia.com',
   },
   {
     name: 'Priya Panchal',
     role: 'Co-Founder & CTO',
-    image: 'https://via.placeholder.com/400x400?text=Jay+Patel',
+    image: PriyaImage,
     description: 'Transforming technology into value for franchising growth.',
-    linkedin: 'https://linkedin.com/in/jaypatel',
-    email: 'jay@franmaxindia.com',
+    linkedin: 'https://www.linkedin.com/in/priyanka-panchal-3a9b94232/',
+    // email: 'cmd@franmax',
   }
 ];
 

@@ -4,6 +4,7 @@ import BrandSidebar from './BrandSidebar';
 import EditProfileModal from './EditProfileModal';
 import BrandDashboardHeader from './BrandDashboardHeader';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../utils/api';
 
 const BrandProfile = () => {
     const [brandData, setBrandData] = useState(null);
@@ -43,7 +44,7 @@ const BrandProfile = () => {
             if (!brandId) return; // Don't fetch if brandId isn't set yet
 
             try {
-                const res = await fetch(`http://localhost/react-api/get-brand-profile.php?brand_id=${brandId}`);
+                const res = await fetch(getApiUrl(`get-brand-profile.php?brand_id=${brandId}`));
                 const data = await res.json();
                 
                 if (data && !data.error) {

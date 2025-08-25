@@ -203,7 +203,7 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
   // Fetch cities based on a single selected state ID
   useEffect(() => {
     if (formData.state_id) {
-      axios.get(`http://localhost/react-api/get-cities.php?state_id=${formData.state_id}`)
+      axios.get(getApiUrl(`get-cities.php?state_id=${formData.state_id}`))
         .then(res => setCities(res.data))
         .catch(err => console.error('Error fetching cities:', err));
     } else {
@@ -217,7 +217,7 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
       setFormData(prev => ({ ...prev, cat_id: '', sub_cat_id: '' }));
       setSubCategories([]);
 
-      axios.get(`http://localhost/react-api/get-category.php?mas_cat_id=${formData.mas_cat_id}`)
+      axios.get(getApiUrl(`get-category.php?mas_cat_id=${formData.mas_cat_id}`))
         .then(res => setCategories(res.data))
         .catch(err => console.error('Error fetching categories:', err));
     } else {
@@ -231,7 +231,7 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
   useEffect(() => {
     if (formData.cat_id) {
       setFormData(prev => ({ ...prev, sub_cat_id: '' }));
-      axios.get(`http://localhost/react-api/get-sub-category.php?cat_id=${formData.cat_id}`)
+      axios.get(getApiUrl(`get-sub-category.php?cat_id=${formData.cat_id}`))
         .then(res => setSubCategories(res.data))
         .catch(err => console.error('Error fetching sub-categories:', err));
     } else {

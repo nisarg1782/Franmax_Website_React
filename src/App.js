@@ -11,7 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Spinner from './components/Spinner';
-
+import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './admin/ProtectedRoute';
 import ProtectedBrandRoute from './brand/ProtectedRoute';
 
@@ -84,6 +84,7 @@ const HomeRedirect = () => {
 function AppContent() {
   const location = useLocation();
 
+
   const hideLayoutRoutes = [
     '/brand/dashboard', '/brand/inquiries', '/brand/profile', '/pricing', '/brand/upload-docs',
     '/admin/login', '/admin/marketing-inquiries', '/admin/dashboard', '/admin/buy-business-inquiries',
@@ -99,6 +100,8 @@ function AppContent() {
     <>
       {!shouldHideLayout && <Header />}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+        <ScrollToTop />;
+
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<HomeRedirect />} />

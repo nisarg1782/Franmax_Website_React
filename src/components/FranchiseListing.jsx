@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'; // <-- added useNavig
 import './design/FranchiseListing.css';
 import InquiryForm from './EnquiryForm';
 import './design/ListingInquiry.css';
-import { getImageUrl } from '../utils/api';
+import { getImageUrl, getApiUrl} from '../utils/api';
 
 const FranchiseListing = () => {
   const { categoryId } = useParams();
@@ -12,7 +12,7 @@ const FranchiseListing = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const apiUrl = `http://localhost/react-api/get-brands-by-category.php?category_id=${categoryId}`;
+  const apiUrl = getApiUrl(`get-brands-by-category.php?category_id=${categoryId}`);
 
   useEffect(() => {
     const fetchBrands = async () => {

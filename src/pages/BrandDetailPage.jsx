@@ -344,7 +344,7 @@ const BrandDetailPage = ({ productId = 7 }) => {
 
       {/* --- */}
       {/* Similar Brands */}
-      <section className="similar-brands">
+      {/* <section className="similar-brands">
         <h2>Similar Brands</h2>
         <div className="slider-wrapper">
           <div className="brand-slider">
@@ -357,7 +357,7 @@ const BrandDetailPage = ({ productId = 7 }) => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Connect Modal */}
       {showConnectModal && (

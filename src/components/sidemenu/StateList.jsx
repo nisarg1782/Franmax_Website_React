@@ -1,13 +1,13 @@
 
 import React, { useEffect, useState } from 'react';
-
+import { getApiUrl } from '../../utils/api';
 // ===== Slider Component =====
 function Slider({ stateId, cityId }) {
   const [slides, setSlides] = useState([]);
 
   useEffect(() => {
     if (stateId) {
-      let url = `http://localhost/react-api/get-slider.php?state_id=${stateId}`;
+      let url = getApiUrl(`get-slider.php?state_id=${stateId}`);
       if (cityId) url += `&city_id=${cityId}`;
 
       fetch(url)
@@ -41,7 +41,7 @@ function StateCityDrawer({ onStateSelect, onCitySelect }) {
   const [cityVisibleCount, setCityVisibleCount] = useState(6);
 
   useEffect(() => {
-    fetch('http://localhost:80/react-api/get-indian-states.php')
+    fetch(getApiUrl('get-indian-states.php'))
       .then(res => res.json())
       .then(data => Array.isArray(data) && setStates(data));
   }, []);
@@ -54,7 +54,7 @@ function StateCityDrawer({ onStateSelect, onCitySelect }) {
     setCityVisibleCount(6);
 
     if (!cities[state.id]) {
-      fetch(`http://localhost/react-api/get-cities.php?state_id=${state.id}`)
+      fetch(getApiUrl(`get-cities.php?state_id=${state.id}`))
         .then(res => res.json())
         .then(data => setCities(prev => ({ ...prev, [state.id]: data })));
     }

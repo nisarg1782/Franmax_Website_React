@@ -60,7 +60,6 @@ const TabContent = ({ activeTab }) => {
           ))}
         </div>
       </section>
-
       <section className="tab-section">
         <h3 className="tab-subheading">🛠️ What We Do</h3>
         <div className="work-grid">

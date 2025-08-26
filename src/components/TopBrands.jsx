@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './design/TopBrands.css';
-import { getImageUrl } from '../utils/api';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getApiUrl } from '../utils/api';
+import { getImageUrl, getApiUrl } from '../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 const TopBrands = ({
   apiUrl = getApiUrl('get-premium-brands.php'),
@@ -10,12 +9,13 @@ const TopBrands = ({
   viewAllLink = '/franchises'
 }) => {
   const [brands, setBrands] = useState([]);
-  const [visibleIndex, setVisibleIndex] = useState(0);
   const intervalRef = useRef(null);
   const cardGridRef = useRef(null);
-  const navigate = useNavigate(); // ✅ useNavigate initialized
+  const cardRef = useRef(null);
+  const navigate = useNavigate();
+  const [cardWidth, setCardWidth] = useState(0);
 
-  // ... (useEffect hooks for fetching, carousel, and transform) ...
+  // Fetch brands from API
   useEffect(() => {
     const fetchBrands = async () => {
       try {
@@ -27,7 +27,7 @@ const TopBrands = ({
           );
           setBrands(unique);
         } else {
-          console.error("API response format unexpected or no brands found:", data);
+          console.error("API response unexpected or no brands found:", data);
           setBrands([]);
         }
       } catch (err) {
@@ -35,51 +35,82 @@ const TopBrands = ({
         setBrands([]);
       }
     };
-    if (apiUrl) {
-      fetchBrands();
-    }
+    if (apiUrl) fetchBrands();
+
     return () => clearInterval(intervalRef.current);
   }, [apiUrl]);
 
+  // Measure card width dynamically
   useEffect(() => {
-    if (brands.length > 3) {
+    if (cardRef.current) {
+      const computedWidth = cardRef.current.offsetWidth;
+      const computedStyle = getComputedStyle(cardRef.current);
+      const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
+      setCardWidth(computedWidth + marginRight);
+    }
+    const handleResize = () => {
+      if (cardRef.current) {
+        const computedWidth = cardRef.current.offsetWidth;
+        const computedStyle = getComputedStyle(cardRef.current);
+        const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
+        setCardWidth(computedWidth + marginRight);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [brands]);
+
+  // Auto-slide every 4s if more than 3 brands
+  useEffect(() => {
+    if (brands.length > 3 && cardWidth > 0) {
       clearInterval(intervalRef.current);
       intervalRef.current = setInterval(() => {
-        setVisibleIndex(prev => (prev + 1) % brands.length);
+        if (cardGridRef.current) {
+          // Animate grid to slide by one card
+          cardGridRef.current.style.transition = "transform 0.8s ease-in-out";
+          cardGridRef.current.style.transform = `translateX(-${cardWidth}px)`;
+
+          setTimeout(() => {
+            // Reorder brands: move first to end
+            setBrands(prev => {
+              const first = prev[0];
+              return [...prev.slice(1), first];
+            });
+            // Reset instantly for seamless loop
+            if (cardGridRef.current) {
+              cardGridRef.current.style.transition = "none";
+              cardGridRef.current.style.transform = "translateX(0)";
+            }
+          }, 800);
+        }
       }, 4000);
     } else {
       clearInterval(intervalRef.current);
     }
     return () => clearInterval(intervalRef.current);
-  }, [brands]);
+  }, [brands.length, cardWidth]);
 
-  useEffect(() => {
-    if (cardGridRef.current && brands.length > 0) {
-      const cardWidthWithGap = 280 + 15;
-      const offset = visibleIndex * cardWidthWithGap;
-      cardGridRef.current.style.transform = `translateX(-${offset}px)`;
-    }
-  }, [visibleIndex, brands]);
-
-  // ✅ Added missing function
   const handleKnowMore = (register_id) => {
     navigate(`/brand/${register_id}`);
   };
+
   return (
     <div className="syb-wrapper">
       <div className="syb-heading-row">
-        {
-          brands.length >= 1 && <h2 className="syb-heading">{sectionTitle}</h2>
-        }
-
+        {brands.length >= 1 && <h2 className="syb-heading">{sectionTitle}</h2>}
         {brands.length >= 1 && (
           <a href={viewAllLink} className="syb-view-all">View All</a>
         )}
       </div>
+
       <div className="syb-carousel-container">
         <div className="syb-grid" ref={cardGridRef}>
           {brands.map((brand, i) => (
-            <div className="syb-card" key={brand.id || i}>
+            <div 
+              className="syb-card" 
+              key={brand.id || i} 
+              ref={i === 0 ? cardRef : null} // measure first card
+            >
               <div className="syb-img-wrap">
                 <img src={getImageUrl(brand.logo)} alt={brand.name} />
               </div>
@@ -92,11 +123,15 @@ const TopBrands = ({
                   </div>
                   <div className="biz-field">
                     <span className="label">Investment:</span>
-                    <span className="value">₹{brand.min_investment} - {brand.max_investment}</span>
+                    <span className="value">
+                      ₹{brand.min_investment} - {brand.max_investment}
+                    </span>
                   </div>
                   <div className="biz-field">
                     <span className="label">Area:</span>
-                    <span className="value">{brand.min_area} - {brand.max_area} sq.ft</span>
+                    <span className="value">
+                      {brand.min_area} - {brand.max_area} sq.ft
+                    </span>
                   </div>
                   <div className="biz-field">
                     <span className="label">Outlets:</span>

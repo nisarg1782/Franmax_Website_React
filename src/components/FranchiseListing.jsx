@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'; // <-- added useNavig
 import './design/FranchiseListing.css';
 import InquiryForm from './EnquiryForm';
 import './design/ListingInquiry.css';
-import { getImageUrl, getApiUrl} from '../utils/api';
+import { getImageUrl, getApiUrl } from '../utils/api';
 
 const FranchiseListing = () => {
   const { categoryId } = useParams();
@@ -42,8 +42,8 @@ const FranchiseListing = () => {
   }, [categoryId, apiUrl]);
 
   const handleKnowMore = (register_id) => {
-  navigate(`/brand/${register_id}`);  // Must match the route in App.js
-};
+    navigate(`/brand/${register_id}`);  // Must match the route in App.js
+  };
   if (loading) return <div className="loading-message">Loading brands...</div>;
   if (error) return <div className="error-message">{error}</div>;
   if (brands.length === 0) return <div className="no-brands-message">No franchises found in this category.</div>;
@@ -58,9 +58,9 @@ const FranchiseListing = () => {
           {brands.map((brand, i) => (
             <div className="franchise-card" key={brand.id || i}>
               <div className="franchise-img-wrap">
-                <img 
-                  src={getImageUrl(brand.logo) || 'https://via.placeholder.com/200'} 
-                  alt={brand.name || 'Brand'} 
+                <img
+                  src={getImageUrl(brand.logo) || 'https://via.placeholder.com/200'}
+                  alt={brand.name || 'Brand'}
                 />
               </div>
               <div className="franchise-content">
@@ -72,7 +72,7 @@ const FranchiseListing = () => {
                   </div>
                   <div className="biz-field">
                     <span className="label">Investment:</span>
-                    <span className="value">₹{brand.min_investment || 0} - ₹{brand.max_investment || 0}</span>
+                    <span className="value">₹{brand.min_investment} - {brand.max_investment}</span>
                   </div>
                   <div className="biz-field">
                     <span className="label">Area:</span>
@@ -85,12 +85,12 @@ const FranchiseListing = () => {
                 </div>
 
                 {/* Navigate to product detail page */}
-               <button 
-  className="franchise-btn" 
-  onClick={() => handleKnowMore(brand.register_id)}
->
-  Know More
-</button>
+                <button
+                  className="franchise-btn"
+                  onClick={() => handleKnowMore(brand.register_id)}
+                >
+                  Know More
+                </button>
               </div>
             </div>
           ))}

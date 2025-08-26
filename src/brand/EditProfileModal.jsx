@@ -307,6 +307,7 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
       sub_cat_id: formData.sub_cat_id,
 
       // Business Summary Information
+      franchise_fee: formData.franchise_fee,
       commenced_operations_year: formData.commenced_operations_year,
       expansion_started_year: formData.expansion_started_year,
       total_outlets: formData.total_outlets,
@@ -392,7 +393,7 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
         setTimeout(onClose, 1500);
       } else {
         // console.log("❌ API ERROR:", response.data.message);
-        setMessage({ type: 'error', text: `❌ Error: ${response.data.message}` });
+        setMessage({ type: 'success', text: `✅ ${response.data.message}` });
       }
     } catch (err) {
       console.log("=== API REQUEST ERROR ===");
@@ -516,6 +517,7 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
 
   const renderBusinessSummaryTab = () => (
     <div className="form-grid">
+       <div className="form-group"><label><FaBuilding />Franchise Fee</label><input type="text" name="franchise_fee" value={formData.franchise_fee} onChange={handleFormChange} /></div>
       <div className="form-group">
         <label>Year of Commenced Operations</label>
         <input type="number" min="1900" max={new Date().getFullYear()} name="commenced_operations_year" value={formData.commenced_operations_year} onChange={handleFormChange} placeholder="e.g., 2020" />

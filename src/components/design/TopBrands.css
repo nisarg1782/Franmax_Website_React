@@ -1,4 +1,4 @@
-/* src/components/design/PremiumBrands.css */
+/* src/components/design/TopBrands.css */
 
 /* Wrapper */
 .syb-wrapper {
@@ -15,63 +15,74 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+  flex-wrap: wrap; /* Prevent text overflow on small screens */
+  gap: 10px;
 }
 
 .syb-heading {
   font-size: 28px;
   font-weight: 700;
   color: #060644;
+  line-height: 1.3;
 }
 
 .syb-view-all {
-  font-size: 15px; /* Adjusted to 15px as per your request */
-  color: #f5842c; /* Changed to #f5842c */
+  font-size: 15px;
+  color: #f5842c;
   font-weight: 600;
   text-decoration: none;
-  border: 1px solid #f5842c; /* Added border */
-  padding: 6px 14px; /* Added padding */
-  border-radius: 6px; /* Added border-radius */
-  transition: 0.3s;
+  border: 1px solid #f5842c;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .syb-view-all:hover {
-  background-color: #f5842c; /* Hover background */
-  color: #fff; /* Hover text color */
+  background-color: #f5842c;
+  color: #fff;
 }
 
-/* Carousel Container - This is key for the sliding effect */
+/* Carousel Container */
 .syb-carousel-container {
-  overflow: hidden; /* Hides cards outside the visible area */
-  /* Calculate max-width for exactly 3 cards + 2 gaps (280px card, 15px gap) */
-  max-width: calc(3 * 280px + 2 * 15px);
-  margin: 0 auto; /* Center the carousel viewport */
+  overflow: hidden;
+  margin: 0 auto;
+  position: relative;
+  /* Ensures no blurry edges when sliding */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  padding: 0 20px; /* ADDED: side padding to prevent cut-off cards */
 }
 
-/* Grid Layout - Now handles the full row of cards */
+/* Grid: Flex Row scrolling */
 .syb-grid {
-  display: flex;
-  flex-direction: row; /* Ensure cards stay in a single row */
-  flex-wrap: nowrap; /* Prevent wrapping */
-  justify-content: flex-start; /* Align to start for translateX */
-  gap: 15px; /* Gap between cards */
-  transition: transform 0.5s ease-in-out; /* Smooth slide animation */
+  display: flex !important;            /* ADDED: force horizontal layout */
+  flex-direction: row !important;      /* ADDED: enforce row direction */
+  flex-wrap: nowrap !important;        /* ADDED: no wrapping */
+  gap: 15px;
+  transition: transform 0.8s ease-in-out; /* UPDATED: smooth butter animation */
+  will-change: transform;
+  scroll-snap-type: x mandatory; /* Prevent half-card positions */
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Individual Card */
+/* Card */
 .syb-card {
+  flex: 0 0 280px !important; /* UPDATED: prevent flex shrinking */
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
-  min-width: 280px; /* Use min-width to prevent shrinking in the flex container */
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease; /* UPDATED: smoother hover */
   overflow: hidden;
-  box-sizing: border-box; /* Include padding/border in card width */
+  box-sizing: border-box;
+  scroll-snap-align: start; /* Cards snap perfectly */
 }
 
 .syb-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.02); /* UPDATED: slight scale on hover */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15); /* ADDED: more visible hover shadow */
 }
 
 /* Image Wrap */
@@ -88,13 +99,15 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  display: block;
+  backface-visibility: hidden;
 }
 
-/* Card Content */
+/* Content */
 .syb-content {
   padding: 16px;
   text-align: center;
-  flex-grow: 1; /* Allows content to expand to fill space */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -105,13 +118,14 @@
   font-weight: 700;
   color: #333;
   margin-bottom: 12px;
+  line-height: 1.4;
 }
 
 /* Detail Fields */
 .syb-detail {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   text-align: left;
   font-size: 14px;
   margin-bottom: 12px;
@@ -138,7 +152,7 @@
 
 /* Button */
 .syb-btn {
-  margin-top: auto; /* Push button to the bottom */
+  margin-top: auto;
   padding: 8px 16px;
   background: transparent;
   border: 1px solid #f97316;
@@ -147,9 +161,9 @@
   cursor: pointer;
   font-weight: 500;
   transition: all 0.3s ease;
-  width: fit-content; /* Make button only as wide as its content */
+  width: fit-content;
   margin-left: auto;
-  margin-right: auto; /* Center the button */
+  margin-right: auto;
 }
 
 .syb-btn:hover {
@@ -157,33 +171,37 @@
   color: #fff;
 }
 
-/* Responsive */
+/* Responsive: 3 cards -> 2 cards -> 1 card */
+@media (max-width: 1200px) {
+  .syb-carousel-container {
+    max-width: calc(3 * 280px + 2 * 15px);
+  }
+}
 @media (max-width: 992px) {
   .syb-carousel-container {
-    /* Adjust for 2 cards + 1 gap */
     max-width: calc(2 * 280px + 1 * 15px);
   }
 }
-
 @media (max-width: 768px) {
   .syb-carousel-container {
-    /* Adjust for 1 card only */
     max-width: 280px;
+    overflow-x: auto;             /* ADDED: swipe scroll on small screens */
+    scrollbar-width: none;        /* ADDED: hide scrollbar (Firefox) */
+  }
+  .syb-carousel-container::-webkit-scrollbar {
+    display: none;                /* ADDED: hide scrollbar (Chrome) */
   }
   .syb-heading-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
   }
 }
-
 @media (max-width: 500px) {
   .syb-carousel-container {
-    /* Allow single card to take up more width on very small screens */
-    max-width: calc(100% - 40px); /* Account for wrapper padding */
+    max-width: calc(100% - 40px);
   }
   .syb-card {
-    min-width: 100%; /* Make card nearly full width */
+    min-width: 100% !important;  /* ADDED: full card width on small screens */
   }
   .syb-wrapper {
     padding: 30px 20px;

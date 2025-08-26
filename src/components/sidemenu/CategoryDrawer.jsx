@@ -1,6 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getApiUrl } from "../../utils/api";
 
 export default function CategoryDrawer() {
   const navigate = useNavigate();
@@ -23,30 +23,11 @@ export default function CategoryDrawer() {
 
   // Fetch master categories
   useEffect(() => {
-    fetch("http://localhost/react-api/get-master-category.php")
+    fetch(getApiUrl("get-master-category.php"))
       .then((res) => res.json())
       .then((data) => Array.isArray(data) && setMasterCategories(data));
   }, []);
 
-  // Restore selection from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("categorySelection");
-    if (saved) {
-      const { masterId, categoryId, subcategoryId } = JSON.parse(saved);
-      const master = masterCategories.find((m) => m.mas_cat_id === masterId);
-      const catList = categories[masterId] || [];
-      const cat = catList.find((c) => c.cat_id === categoryId);
-
-      if (master) setSelectedMaster(master);
-      if (cat) setSelectedCategory(cat);
-      if (subcategoryId) setSelectedSubcategory({ subcat_id: subcategoryId });
-      if (subcategoryId) setActivePanel("subcategory");
-      else if (categoryId) setActivePanel("category");
-      else if (masterId) setActivePanel("master");
-    }
-  }, [masterCategories, categories]);
-
-  // Save selection to localStorage
   const saveSelection = ({ masterId, categoryId, subcategoryId }) => {
     localStorage.setItem(
       "categorySelection",
@@ -54,7 +35,6 @@ export default function CategoryDrawer() {
     );
   };
 
-  // Master click
   const handleMasterClick = (master) => {
     setSelectedMaster(master);
     setActivePanel("category");
@@ -65,12 +45,11 @@ export default function CategoryDrawer() {
 
     saveSelection({ masterId: master.mas_cat_id });
 
-    navigate(`/products?mas_cat=${master.mas_cat_id}`);
+    navigate(`/category?mas_cat=${master.mas_cat_id}`);
 
-    // Fetch categories if not already fetched
     if (!categories[master.mas_cat_id]) {
       fetch(
-        `http://localhost/react-api/get-category.php?mas_cat_id=${master.mas_cat_id}`
+        getApiUrl(`get-category.php?mas_cat_id=${master.mas_cat_id}`)
       )
         .then((res) => res.json())
         .then((data) => {
@@ -79,7 +58,6 @@ export default function CategoryDrawer() {
     }
   };
 
-  // Category click
   const handleCategoryClick = (cat) => {
     setSelectedCategory(cat);
     setActivePanel("subcategory");
@@ -89,13 +67,10 @@ export default function CategoryDrawer() {
 
     saveSelection({ masterId: selectedMaster?.mas_cat_id, categoryId: cat.cat_id });
 
-    navigate(
-      `/products?mas_cat=${selectedMaster?.mas_cat_id}&cat=${cat.cat_id}`
-    );
+    navigate(`/category?mas_cat=${selectedMaster?.mas_cat_id}&cat=${cat.cat_id}`);
 
-    // Fetch subcategories if not already fetched
     if (!subcategories[cat.cat_id]) {
-      fetch(`http://localhost/react-api/get-sub-category.php?cat_id=${cat.cat_id}`)
+      fetch(getApiUrl(`get-sub-category.php?cat_id=${cat.cat_id}`))
         .then((res) => res.json())
         .then((data) => {
           setSubcategories((prev) => ({ ...prev, [cat.cat_id]: data }));
@@ -103,7 +78,6 @@ export default function CategoryDrawer() {
     }
   };
 
-  // Subcategory click
   const handleSubcategoryClick = (sub) => {
     setSelectedSubcategory(sub);
 
@@ -114,7 +88,7 @@ export default function CategoryDrawer() {
     });
 
     navigate(
-      `/products?mas_cat=${selectedMaster?.mas_cat_id}&cat=${selectedCategory?.cat_id}&sub=${sub.subcat_id}`
+      `/category?mas_cat=${selectedMaster?.mas_cat_id}&cat=${selectedCategory?.cat_id}&sub=${sub.subcat_id}`
     );
   };
 
@@ -146,100 +120,66 @@ export default function CategoryDrawer() {
 
   return (
     <div className="drawer-container">
-      {/* MASTER CATEGORY PANEL */}
+      {/* MASTER PANEL */}
       <div className={`drawer-panel ${activePanel === "master" ? "active" : ""}`}>
         <h4>Explore Categories</h4>
-
         <input
           type="text"
           placeholder="Search master categories..."
-          className="search-input"
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
             setVisibleMasters(4);
           }}
         />
-
-        <ul className="drawer-list">
+        <ul>
           {displayedMasters.map((master) => (
             <li
               key={master.mas_cat_id}
               onClick={() => handleMasterClick(master)}
-              className={selectedMaster?.mas_cat_id === master.mas_cat_id ? "selected" : ""}
             >
-              {master.mas_cat_name} <span className="arrow">›</span>
+              {master.mas_cat_name} ›
             </li>
           ))}
         </ul>
-
-        {visibleMasters < filteredMasters.length && (
-          <div className="load-more-wrapper">
-            <button className="load-more-btn" onClick={() => setVisibleMasters((v) => v + 4)}>
-              Load More
-            </button>
-          </div>
-        )}
       </div>
 
       {/* CATEGORY PANEL */}
       <div className={`drawer-panel ${activePanel === "category" ? "active" : ""}`}>
-        <div className="drawer-header">
-          <button onClick={goBack}>← Back</button>
-          <h4>{selectedMaster?.mas_cat_name}</h4>
-        </div>
-
+        <button onClick={goBack}>← Back</button>
+        <h4>{selectedMaster?.mas_cat_name}</h4>
         <input
           type="text"
           placeholder="Search categories..."
-          className="search-input"
           value={categorySearch}
           onChange={(e) => {
             setCategorySearch(e.target.value);
             setVisibleCategories(4);
           }}
         />
-
-        <ul className="drawer-list">
+        <ul>
           {displayedCategories.map((cat) => (
-            <li
-              key={cat.cat_id}
-              onClick={() => handleCategoryClick(cat)}
-              className={selectedCategory?.cat_id === cat.cat_id ? "selected" : ""}
-            >
-              {cat.cat_name} <span className="arrow">›</span>
+            <li key={cat.cat_id} onClick={() => handleCategoryClick(cat)}>
+              {cat.cat_name} ›
             </li>
           ))}
         </ul>
-
-        {visibleCategories < filteredCategories.length && (
-          <div className="load-more-wrapper">
-            <button className="load-more-btn" onClick={() => setVisibleCategories((v) => v + 4)}>
-              Load More
-            </button>
-          </div>
-        )}
       </div>
 
       {/* SUBCATEGORY PANEL */}
       <div className={`drawer-panel ${activePanel === "subcategory" ? "active" : ""}`}>
-        <div className="drawer-header">
-          <button onClick={goBack}>← Back</button>
-          <h4>{selectedCategory?.cat_name}</h4>
-        </div>
-
+        <button onClick={goBack}>← Back</button>
+        <h4>{selectedCategory?.cat_name}</h4>
         <input
           type="text"
           placeholder="Search subcategories..."
-          className="search-input"
           value={subSearch}
           onChange={(e) => {
             setSubSearch(e.target.value);
             setVisibleSubcategories(4);
           }}
         />
-
-        <ul className="drawer-list">
+        <ul>
           {displayedSubcategories.map((sub) => (
             <li key={sub.subcat_id}>
               <a
@@ -248,21 +188,12 @@ export default function CategoryDrawer() {
                   e.preventDefault();
                   handleSubcategoryClick(sub);
                 }}
-                className={selectedSubcategory?.subcat_id === sub.subcat_id ? "selected" : ""}
               >
                 {sub.subcat_name}
               </a>
             </li>
           ))}
         </ul>
-
-        {visibleSubcategories < filteredSubcategories.length && (
-          <div className="load-more-wrapper">
-            <button className="load-more-btn" onClick={() => setVisibleSubcategories((v) => v + 4)}>
-              Load More
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

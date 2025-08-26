@@ -96,7 +96,8 @@ export default function BrandFormModal({ isOpen, onClose, onBack }) {
       const data = await res.json();
 
       if (data.success) {
-        setShowSuccess(true);
+        // setShowSuccess(true);
+         toast.success("🚀 Registration successful!");
       } else {
         toast.error(data.message || "Registration failed.");
       }

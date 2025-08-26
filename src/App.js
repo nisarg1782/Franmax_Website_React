@@ -14,7 +14,7 @@ import Spinner from './components/Spinner';
 import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './admin/ProtectedRoute';
 import ProtectedBrandRoute from './brand/ProtectedRoute';
-
+import CategoryPage from "./components/CategoryPage";
 import BrandListing from "./pages/BrandListing";
 import ProductDetail from "./pages/ProductDetail";
 
@@ -263,6 +263,8 @@ function AppContent() {
         <Route path="/investor-profile" element={<Suspense fallback={FallbackSpinner}><LazyInvestorProfile /></Suspense>} />
          <Route path="/investor-pricing" element={<Suspense fallback={FallbackSpinner}><LazyInvestorPricing /></Suspense>} />
       <Route path="/investor-brands" element={<Suspense fallback={FallbackSpinner}><LazyInvestorBrandListing /></Suspense>} />
+      
+        <Route path="/category" element={<CategoryPage />} />
       </Routes>
 
       {!shouldHideLayout && <Footer />}

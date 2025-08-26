@@ -196,7 +196,7 @@ const BrandDetailPage = () => {
           </p>
 
           <p className="about-intro">
-            Established in <span>{brandData.master_unit_details?.start_year || "recent years"}</span>, 
+            Established in <span>{brandData.commenced_operations || "recent years"}</span>, 
             with <span>{brandData.total_outlets || "multiple"}</span> outlets across India.
           </p>
 

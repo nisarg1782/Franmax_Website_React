@@ -22,7 +22,6 @@ const NewsSection = () => {
         console.error('Failed to fetch news:', err);
       }
     };
-
     fetchNews();
   }, []);
 
@@ -32,7 +31,6 @@ const NewsSection = () => {
         setVisibleIndex((prev) => (prev + 1) % news.length);
       }, 3000);
     }
-
     return () => clearInterval(intervalRef.current);
   }, [news]);
 
@@ -56,8 +54,14 @@ const NewsSection = () => {
 
   return (
     <section className="news-section">
-      <h2 className="news-heading">Latest News & Updates</h2>
-      <p className="news-subheading">Stay informed with our recent activities and announcements</p>
+      {news.length > 0 && (
+        <>
+          <h2 className="news-heading">Latest News & Updates</h2>
+          <p className="news-subheading">
+            Stay informed with our recent activities and announcements
+          </p>
+        </>
+      )}
 
       <div className="news-card-container">
         {getVisibleNews().map((item, index) => (
@@ -66,7 +70,6 @@ const NewsSection = () => {
               <div className="image-wrapper">
                 <img src={getImageUrl(item.image)} alt={item.title || "Brand Image"} />
               </div>
-
             </div>
             <div className="news-content">
               <h3 className="news-title">{item.title}</h3>

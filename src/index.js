@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import CssBaseline from '@mui/material/CssBaseline';
 
+
 // Prevent browser from restoring scroll on reload
 if ('scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual';

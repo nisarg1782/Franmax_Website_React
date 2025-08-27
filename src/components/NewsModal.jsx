@@ -3,6 +3,7 @@ import React from 'react';
 import DOMPurify from 'dompurify';
 import './design/NewsModal.css';
 import { FaTimes } from 'react-icons/fa';
+import { getImageUrl } from '../utils/api';
 
 const NewsModal = ({ news, onClose }) => {
   // Sanitize the HTML content
@@ -15,7 +16,7 @@ const NewsModal = ({ news, onClose }) => {
           <FaTimes />
         </button>
 
-        {news.image && <img className="modal-image" src={news.image} alt={news.title} />}
+        {news.image && <img className="modal-image" src={getImageUrl(news.image)} alt={news.title} />}
         <h2 className="modal-title">{news.title}</h2>
         <p className="modal-date">{new Date(news.created_at).toLocaleDateString()}</p>
 

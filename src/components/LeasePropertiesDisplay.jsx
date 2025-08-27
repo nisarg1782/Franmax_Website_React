@@ -71,7 +71,7 @@ const LeasePropertiesDisplay = () => {
               <h3 className="biz-title">{prop.property_type}</h3>
               <div className="lease-meta">
                 <p><span className="label">Expected Rent:</span> <span>₹{prop.expected_rent}</span></p>
-                <p><span className="label">Area:</span> <span>{prop.sqft} sqft</span></p>
+                <p><span className="label">Area:</span> <span>{prop.sqft}</span></p>
                 <p><span className="label">Floor:</span> <span>{prop.floor_type}</span></p>
                 <p><span className="label">City:</span> <span>{prop.city_name}</span></p>
               </div>

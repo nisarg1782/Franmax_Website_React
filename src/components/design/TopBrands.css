@@ -1,5 +1,3 @@
-/* src/components/design/TopBrands.css */
-
 /* Wrapper */
 .syb-wrapper {
   padding: 50px 20px;
@@ -15,7 +13,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  flex-wrap: wrap; /* Prevent text overflow on small screens */
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -48,41 +46,40 @@
   overflow: hidden;
   margin: 0 auto;
   position: relative;
-  /* Ensures no blurry edges when sliding */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
-  padding: 0 20px; /* ADDED: side padding to prevent cut-off cards */
+  padding: 0 20px;
 }
 
-/* Grid: Flex Row scrolling */
+/* Grid Row */
 .syb-grid {
-  display: flex !important;            /* ADDED: force horizontal layout */
-  flex-direction: row !important;      /* ADDED: enforce row direction */
-  flex-wrap: nowrap !important;        /* ADDED: no wrapping */
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
   gap: 15px;
-  transition: transform 0.8s ease-in-out; /* UPDATED: smooth butter animation */
+  transition: transform 0.8s ease-in-out;
   will-change: transform;
-  scroll-snap-type: x mandatory; /* Prevent half-card positions */
+  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 }
 
 /* Card */
 .syb-card {
-  flex: 0 0 280px !important; /* UPDATED: prevent flex shrinking */
+  flex: 0 0 280px !important;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
   display: flex;
   flex-direction: column;
-  transition: transform 0.4s ease, box-shadow 0.4s ease; /* UPDATED: smoother hover */
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
   overflow: hidden;
   box-sizing: border-box;
-  scroll-snap-align: start; /* Cards snap perfectly */
+  scroll-snap-align: start;
 }
 
 .syb-card:hover {
-  transform: translateY(-5px) scale(1.02); /* UPDATED: slight scale on hover */
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15); /* ADDED: more visible hover shadow */
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
 /* Image Wrap */
@@ -171,37 +168,56 @@
   color: #fff;
 }
 
-/* Responsive: 3 cards -> 2 cards -> 1 card */
+/* Fix container to show exactly 3 cards centered */
+.syb-carousel-container {
+  overflow: hidden;
+  margin: 0 auto;
+  position: relative;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+   /* remove side padding that caused half cards */
+  max-width: calc(3 * 280px + 2 * 15px); /* 3 cards + 2 gaps */
+}
+
+/* Responsive Breakpoints */
+
+/* 3 cards visible */
 @media (max-width: 1200px) {
   .syb-carousel-container {
     max-width: calc(3 * 280px + 2 * 15px);
   }
 }
+
+/* 2 cards visible */
 @media (max-width: 992px) {
   .syb-carousel-container {
     max-width: calc(2 * 280px + 1 * 15px);
   }
 }
+
+/* 1 card visible, swipe scroll */
 @media (max-width: 768px) {
   .syb-carousel-container {
     max-width: 280px;
-    overflow-x: auto;             /* ADDED: swipe scroll on small screens */
-    scrollbar-width: none;        /* ADDED: hide scrollbar (Firefox) */
+    overflow-x: auto;
+    scrollbar-width: none;
   }
   .syb-carousel-container::-webkit-scrollbar {
-    display: none;                /* ADDED: hide scrollbar (Chrome) */
+    display: none;
   }
   .syb-heading-row {
     flex-direction: column;
     align-items: flex-start;
   }
 }
+
+/* Full width single card on very small screens */
 @media (max-width: 500px) {
   .syb-carousel-container {
     max-width: calc(100% - 40px);
   }
   .syb-card {
-    min-width: 100% !important;  /* ADDED: full card width on small screens */
+    min-width: 100% !important;
   }
   .syb-wrapper {
     padding: 30px 20px;

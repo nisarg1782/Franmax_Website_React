@@ -2,30 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { getApiUrl } from '../../utils/api';
 // ===== Slider Component =====
-function Slider({ stateId, cityId }) {
-  const [slides, setSlides] = useState([]);
 
-  useEffect(() => {
-    if (stateId) {
-      let url = getApiUrl(`get-slider.php?state_id=${stateId}`);
-      if (cityId) url += `&city_id=${cityId}`;
-
-      fetch(url)
-        .then(res => res.json())
-        .then(data => setSlides(data || []));
-    }
-  }, [stateId, cityId]);
-
-  if (!slides.length) return <div>No slides available</div>;
-
-  return (
-    <div className="slider">
-      {slides.map((slide, idx) => (
-        <img key={idx} src={slide.image} alt={slide.name} />
-      ))}
-    </div>
-  );
-}
 
 // ===== Drawer Component =====
 function StateCityDrawer({ onStateSelect, onCitySelect }) {
@@ -184,7 +161,7 @@ export default function App() {
         }}
       />
 
-      <Slider stateId={selectedState} cityId={selectedCity} />
+      
     </div>
   );
 }

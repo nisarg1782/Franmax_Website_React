@@ -12,10 +12,20 @@ const TopBrands = ({
   const intervalRef = useRef(null);
   const cardGridRef = useRef(null);
   const cardRef = useRef(null);
-  const navigate = useNavigate();
   const [cardWidth, setCardWidth] = useState(0);
+  const navigate = useNavigate();
 
-  // Fetch brands from API
+  // Shuffle helper
+  const shuffleArray = (array) => {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
+  // Fetch brands from API and shuffle
   useEffect(() => {
     const fetchBrands = async () => {
       try {
@@ -25,7 +35,7 @@ const TopBrands = ({
           const unique = data.brands.filter(
             (b, i, arr) => arr.findIndex(x => x.id === b.id) === i
           );
-          setBrands(unique);
+          setBrands(shuffleArray(unique)); // Shuffle on load
         } else {
           console.error("API response unexpected or no brands found:", data);
           setBrands([]);
@@ -42,13 +52,7 @@ const TopBrands = ({
 
   // Measure card width dynamically
   useEffect(() => {
-    if (cardRef.current) {
-      const computedWidth = cardRef.current.offsetWidth;
-      const computedStyle = getComputedStyle(cardRef.current);
-      const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
-      setCardWidth(computedWidth + marginRight);
-    }
-    const handleResize = () => {
+    const updateWidth = () => {
       if (cardRef.current) {
         const computedWidth = cardRef.current.offsetWidth;
         const computedStyle = getComputedStyle(cardRef.current);
@@ -56,8 +60,9 @@ const TopBrands = ({
         setCardWidth(computedWidth + marginRight);
       }
     };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
   }, [brands]);
 
   // Auto-slide every 4s if more than 3 brands
@@ -66,17 +71,14 @@ const TopBrands = ({
       clearInterval(intervalRef.current);
       intervalRef.current = setInterval(() => {
         if (cardGridRef.current) {
-          // Animate grid to slide by one card
           cardGridRef.current.style.transition = "transform 0.8s ease-in-out";
           cardGridRef.current.style.transform = `translateX(-${cardWidth}px)`;
 
           setTimeout(() => {
-            // Reorder brands: move first to end
             setBrands(prev => {
               const first = prev[0];
               return [...prev.slice(1), first];
             });
-            // Reset instantly for seamless loop
             if (cardGridRef.current) {
               cardGridRef.current.style.transition = "none";
               cardGridRef.current.style.transform = "translateX(0)";
@@ -106,7 +108,7 @@ const TopBrands = ({
       <div className="syb-carousel-container">
         <div className="syb-grid" ref={cardGridRef}>
           {brands.map((brand, i) => (
-            <div 
+            <div
               className="syb-card" 
               key={brand.id || i} 
               ref={i === 0 ? cardRef : null} // measure first card

@@ -103,5 +103,4 @@ const FranchiseListing = () => {
     </div>
   );
 };
-
 export default FranchiseListing;

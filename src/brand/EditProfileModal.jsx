@@ -23,6 +23,8 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
   const [subCategories, setSubCategories] = useState([]);
   const [franchiseModels, setFranchiseModels] = useState([]);
   const [franchiseTypes, setFranchiseTypes] = useState([]);
+  const [isLoadingStates, setIsLoadingStates] = useState(false);
+  const [isLoadingCities, setIsLoadingCities] = useState(false);
 
   // Define the options for the dropdowns
   const outletRanges = ['0-10', '11-50', '51-100', '100+'];
@@ -33,7 +35,7 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
   const requiredAreaOptions = ['100-500', '501-1500', '1501-2500', '2501-5000', '5000+'];
   const investmentRangeOptions = ['250000-1000000', '1100000-2000000', '2100000-3500000', '3600000-5000000', '5000000-10000000', '10000000+'];
   const expectedRoiOptions = ['15-20', '20-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90', '90-100', '100+'];
-  const expectedPaybackOptions = ['0.5', '1', '1.5', '2' ,'2+'];
+  const expectedPaybackOptions = ['0.5', '1', '1.5', '2', '2+'];
 
   // State for showing success/error messages
   const [message, setMessage] = useState(null);
@@ -259,6 +261,90 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
   };
 
   // Generic handler for multi-select checkboxes
+  // const handleMultiSelectChange = (field, id) => {
+  //   setFormData(prev => {
+  //     let updatedIds;
+  //     // Handle state selection logic
+  //     if (field === 'expansion_state_ids') {
+  //       const currentIds = prev[field];
+  //       updatedIds = currentIds.includes(id)
+  //         ? currentIds.filter(item => item !== id)
+  //         : [...currentIds, id];
+
+  //       // If a state is deselected, remove its cities from the city selection
+  //       if (currentIds.includes(id)) {
+  //         const citiesToRemove = cities.filter(city => city.state_id === id).map(city => city.id);
+  //         const updatedCityIds = prev.expansion_city_ids.filter(cityId => !citiesToRemove.includes(cityId));
+  //         return {
+  //           ...prev,
+  //           [field]: updatedIds,
+  //           expansion_city_ids: updatedCityIds,
+  //         };
+  //       } else {
+  //         return { ...prev, [field]: updatedIds };
+  //       }
+  //     }
+
+  //     // Handle city selection logic (unchanged)
+  //     const currentIds = prev[field];
+  //     updatedIds = currentIds.includes(id)
+  //       ? currentIds.filter(item => item !== id)
+  //       : [...currentIds, id];
+
+  //     return { ...prev, [field]: updatedIds };
+  //   });
+  // };
+   useEffect(() => {
+    const fetchStates = async () => {
+      setIsLoadingStates(true);
+      try {
+        const response = await fetch('http://localhost/react-api/get-indian-states.php');
+        const data = await response.json();
+        setStates(data);
+      } catch (error) {
+        console.error("Error fetching states:", error);
+      } finally {
+        setIsLoadingStates(false);
+      }
+    };
+    fetchStates();
+  }, []);
+
+  // Fetch cities based on selected states
+  useEffect(() => {
+    const fetchCitiesForSelectedStates = async () => {
+      const selectedStateIds = formData.expansion_state_ids;
+      if (selectedStateIds.length === 0) {
+        setCities([]);
+        setFormData(prev => ({ ...prev, expansion_city_ids: [] }));
+        return;
+      }
+
+      setIsLoadingCities(true);
+      try {
+        const fetchPromises = selectedStateIds.map(stateId =>
+          fetch(`http://localhost/react-api/get-cities.php?state_id=${stateId}`).then(res => res.json())
+        );
+
+        const allCitiesArrays = await Promise.all(fetchPromises);
+        const allCities = allCitiesArrays.flat(); // Combines all cities into a single array
+        setCities(allCities);
+
+        // Update selected cities to remove any that are no longer in the list
+        setFormData(prev => {
+          const validCityIds = allCities.map(city => city.id);
+          const newSelectedCityIds = prev.expansion_city_ids.filter(cityId => validCityIds.includes(cityId));
+          return { ...prev, expansion_city_ids: newSelectedCityIds };
+        });
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      } finally {
+        setIsLoadingCities(false);
+      }
+    };
+    fetchCitiesForSelectedStates();
+  }, [formData.expansion_state_ids]); // This effect re-runs whenever the selected states change
+
   const handleMultiSelectChange = (field, id) => {
     setFormData(prev => {
       const currentIds = prev[field];
@@ -268,17 +354,16 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
       return { ...prev, [field]: updatedIds };
     });
   };
-
   const handleSave = async () => {
     setIsLoading(true);
     setMessage(null);
 
-  
+
     // Prepare the payload by converting multi-select arrays to comma-separated strings
     // and merging the correct master franchise details
     const masterFranchiseDetails = formData.master_franchise_details[formData.master_scope?.toLowerCase()] || {};
 
-    
+
 
     // Create a comprehensive payload with all form data
     const payload = {
@@ -367,14 +452,13 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
 
     // Log the complete payload structure
     console.log("=== COMPLETE PAYLOAD STRUCTURE ===");
-  
+
     console.log("Full payload:", payload);
     try {
       // console.log("=== MAKING API CALL ===");
       // console.log("API URL: http://localhost/react-api/simple-api.php");
       // console.log("Request method: POST");
       console.log("Request data:", payload);
-
       const response = await axios.post(getApiUrl('simple-api.php'), payload);
 
       // console.log("=== API RESPONSE ===");
@@ -517,7 +601,7 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
 
   const renderBusinessSummaryTab = () => (
     <div className="form-grid">
-       <div className="form-group"><label><FaBuilding />Franchise Fee</label><input type="text" name="franchise_fee" value={formData.franchise_fee} onChange={handleFormChange} /></div>
+      <div className="form-group"><label><FaBuilding />Franchise Fee</label><input type="text" name="franchise_fee" value={formData.franchise_fee} onChange={handleFormChange} /></div>
       <div className="form-group">
         <label>Year of Commenced Operations</label>
         <input type="number" min="1900" max={new Date().getFullYear()} name="commenced_operations_year" value={formData.commenced_operations_year} onChange={handleFormChange} placeholder="e.g., 2020" />
@@ -696,30 +780,47 @@ const EditBrandModal = ({ brandData, onClose, onUpdate }) => {
       <div className="form-group full">
         <label><FaMapMarkerAlt /> Target States</label>
         <div className="multi-select-container">
-          {states.map(state => (
-            <label key={state.id} className="checkbox-label">
-              <input type="checkbox" value={state.id} checked={formData.expansion_state_ids.includes(state.id)} onChange={() => handleMultiSelectChange('expansion_state_ids', state.id)} />
-              {state.name}
-            </label>
-          ))}
+          {isLoadingStates ? (
+            <p>Loading states...</p>
+          ) : (
+            states.map(state => (
+              <label key={state.id} className="checkbox-label">
+                <input
+                  type="checkbox"
+                  value={state.id}
+                  checked={formData.expansion_state_ids.includes(state.id)}
+                  onChange={() => handleMultiSelectChange('expansion_state_ids', state.id)}
+                />
+                {state.name}
+              </label>
+            ))
+          )}
         </div>
       </div>
       {formData.expansion_state_ids.length > 0 && (
         <div className="form-group full">
           <label><FaCity /> Target Cities</label>
           <div className="multi-select-container">
-            {cities.map(city => (
-              <label key={city.id} className="checkbox-label">
-                <input type="checkbox" value={city.id} checked={formData.expansion_city_ids.includes(city.id)} onChange={() => handleMultiSelectChange('expansion_city_ids', city.id)} />
-                {city.name}
-              </label>
-            ))}
+            {isLoadingCities ? (
+              <p>Loading cities...</p>
+            ) : (
+              cities.map(city => (
+                <label key={city.id} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    value={city.id}
+                    checked={formData.expansion_city_ids.includes(city.id)}
+                    onChange={() => handleMultiSelectChange('expansion_city_ids', city.id)}
+                  />
+                  {city.name}
+                </label>
+              ))
+            )}
           </div>
         </div>
       )}
     </div>
   );
-
   return (
     <div className="modal-overlay">
       <div className="edit-profile-modal">

@@ -4,7 +4,7 @@ import './UploadDocs.css';
 import BrandSidebar from './BrandSidebar';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getApiUrl } from '../utils/api';
+import { getApiUrl,getImageUrl} from '../utils/api';
 import BrandDashboardHeader from './BrandDashboardHeader';
 
 const imageLabels = [
@@ -169,7 +169,7 @@ const UploadDocs = () => {
                                 <div className="upload-box">
                                     {renderPreview(formData[key], key) ? (
                                         <img
-                                            src={renderPreview(formData[key], key)}
+                                            src={getImageUrl(renderPreview(formData[key], key))}
                                             alt={`${label} Preview`}
                                             className="upload-thumbnail"
                                         />

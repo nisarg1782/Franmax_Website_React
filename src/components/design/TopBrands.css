@@ -1,6 +1,4 @@
-/* =======================
-   UNIVERSAL TOP BRANDS
-   ======================= */
+/* src/components/design/TopBrands.css */
 
 /* Wrapper */
 .syb-wrapper {
@@ -22,14 +20,14 @@
 }
 
 .syb-heading {
-  font-size: clamp(20px, 4vw, 28px);
+  font-size: clamp(22px, 4vw, 28px);
   font-weight: 700;
   color: #060644;
   line-height: 1.3;
 }
 
 .syb-view-all {
-  font-size: clamp(13px, 2.5vw, 15px);
+  font-size: 15px;
   color: #f5842c;
   font-weight: 600;
   text-decoration: none;
@@ -47,25 +45,26 @@
 
 /* Carousel Container */
 .syb-carousel-container {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   margin: 0 auto;
   position: relative;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  padding: 0 20px;
-  max-width: calc(3 * 280px + 2 * 15px); /* 3 cards default */
+  padding: 0 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* hide Firefox scrollbar */
+}
+.syb-carousel-container::-webkit-scrollbar {
+  display: none; /* hide Chrome scrollbar */
 }
 
-/* Grid Row */
+/* Grid (horizontal scrolling) */
 .syb-grid {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   gap: 15px;
-  transition: transform 0.8s ease-in-out;
   will-change: transform;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Card */
@@ -79,7 +78,7 @@
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   overflow: hidden;
   box-sizing: border-box;
-  scroll-snap-align: start;
+  scroll-snap-align: center; /* snap each card */
 }
 
 .syb-card:hover {
@@ -87,7 +86,7 @@
   box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
-/* Image Wrap */
+/* Image */
 .syb-img-wrap {
   height: 150px;
   background: #f9f9f9;
@@ -116,14 +115,14 @@
 }
 
 .syb-content h3 {
-  font-size: clamp(16px, 3vw, 18px);
+  font-size: 18px;
   font-weight: 700;
   color: #333;
   margin-bottom: 12px;
   line-height: 1.4;
 }
 
-/* Detail Fields */
+/* Details */
 .syb-detail {
   display: flex;
   flex-direction: column;
@@ -173,55 +172,40 @@
   color: #fff;
 }
 
-/* -----------------------
-   RESPONSIVE BREAKPOINTS
------------------------- */
+/* ============ Responsive Breakpoints ============ */
 
-/* 3 cards visible */
-@media (max-width: 1200px) {
-  .syb-carousel-container {
-    max-width: calc(3 * 280px + 2 * 15px);
+/* Desktop (3 cards) */
+@media (min-width: 993px) {
+  .syb-card {
+    flex: 0 0 30% !important;
   }
 }
 
-/* 2 cards visible */
-@media (max-width: 992px) {
-  .syb-carousel-container {
-    max-width: calc(2 * 280px + 1 * 15px);
+/* Tablet (2 cards) */
+@media (max-width: 992px) and (min-width: 769px) {
+  .syb-card {
+    flex: 0 0 45% !important;
   }
 }
 
-/* 1 card visible with smooth scroll */
+/* Mobile (1 card full width slide) */
 @media (max-width: 768px) {
-  .syb-carousel-container {
-    max-width: 280px;
-    overflow-x: auto;
-    scrollbar-width: none;
+  .syb-card {
+    flex: 0 0 85% !important;
+    margin: 0 auto;
   }
-  .syb-carousel-container::-webkit-scrollbar {
-    display: none;
-  }
-  .syb-heading-row {
-    flex-direction: column;
-    align-items: flex-start;
+}
+
+/* Small phones */
+@media (max-width: 500px) {
+  .syb-wrapper {
+    padding: 30px 15px;
   }
   .syb-heading {
-    font-size: clamp(18px, 4vw, 24px);
-  }
-}
-
-/* Full width single card on very small screens */
-@media (max-width: 500px) {
-  .syb-carousel-container {
-    max-width: calc(100% - 40px);
+    font-size: 20px;
   }
   .syb-card {
+    flex: 0 0 100% !important;
     min-width: 100% !important;
-  }
-  .syb-wrapper {
-    padding: 30px 20px;
-  }
-  .syb-heading {
-    font-size: clamp(16px, 5vw, 20px);
   }
 }

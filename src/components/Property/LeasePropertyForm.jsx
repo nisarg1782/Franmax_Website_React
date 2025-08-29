@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './LeasePropertyPage.css';
 import { validateLeaseForm } from '../../utils/validateLeaseForm';
 import { getApiUrl } from '../../utils/api';
-
+import ThankYouModal from '../ThankYouModal';
 
 const LeasePropertyForm = () => {
   const [formData, setFormData] = useState({
@@ -34,6 +34,7 @@ const LeasePropertyForm = () => {
   const sqftOptions = [
     '500 sq.ft', '1000 sq.ft', '1500 sq.ft', '2000 sq.ft', '2500+ sq.ft'
   ];
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetch(getApiUrl('get-indian-states.php'))
@@ -100,6 +101,14 @@ const LeasePropertyForm = () => {
         setFormData({
           ownerName: '', contact: '', email: '', stateId: '', cityId: '', address: '', message: '', expectedRent: '', sqft: '', propertyType: '', floorType: '', image: null, imagePreview: null
         });
+
+        
+           setShowModal(true); // ✅ Show Thank You Modal
+
+          // Auto close after 3s
+        setTimeout(() => setShowModal(false), 3000);
+
+
       } else if (result.status === 'exists') {
         toast.warning(result.message);
       } else {
@@ -204,6 +213,14 @@ const LeasePropertyForm = () => {
 
         <button type="submit" className="lease-submit-button">Submit</button>
       </form>
+
+        {/* ✅ Thank You Modal */}
+      <ThankYouModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        message="Thank you for submitting your business details! Our team will contact you shortly."
+      />
+
       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );

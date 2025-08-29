@@ -1,161 +1,123 @@
-.inquiry-form-container {
-  background-color: #ffffff;
-  padding: 25px 30px;
-  border-radius: 12px;
-  color: #1f1b44;
-  max-width: 700px;
-  margin: 20px auto;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
-}
+/*
+  InquiryForm.css - Styles for the InquiryForm React component.
+  This file provides a clean, modern, and responsive design for the form.
+*/
 
-.inquiry-form-container h4 {
-  color: #f5842c;
-  text-align: center;
-  font-size: 20px;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.inquiry-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: space-between;
-}
-
-.form-field {
-  flex: 1 1 calc(50% - 8px);
+/* General container styling for the form */
+.form-container {
+  font-family: 'Inter', sans-serif;
+  background: #f7fafc; /* Light gray background */
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  max-width: 500px;
+  margin: 2rem auto;
   position: relative;
-  min-width: 260px;
-  display: flex;
-  align-items: center;
+  border: 1px solid #e2e8f0;
 }
 
-/* Icon Fix */
-.form-icon {
+/* Close button for modals */
+.close-btn {
   position: absolute;
-  left: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #999;
-  font-size: 16px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* Inputs & Textarea */
-.form-field input,
-.form-field textarea {
-  width: 100%;
-  padding: 10px 12px 10px 38px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  color: #333;
-  font-size: 14px;
-  transition: 0.2s ease;
-}
-
-.form-field textarea {
-  resize: none;
-}
-
-.form-field input:focus,
-.form-field textarea:focus {
-  border-color: #f5842c;
-  background-color: #fff;
-  box-shadow: 0 0 0 2px #f5842c33;
-  outline: none;
-}
-
-/* Select Container to align with inputs */
-.custom-select-container {
-  width: 100%;
-}
-
-/* React Select */
-.custom-select-container .react-select__control {
-  background-color: #f9f9f9 !important;
-  border: 1px solid #ccc !important;
-  border-radius: 8px !important;
-  min-height: 42px !important;
-  padding-left: 6px !important;
-  box-shadow: none !important;
-  font-size: 14px !important;
-}
-
-.custom-select-container .react-select__control--is-focused {
-  border-color: #f5842c !important;
-  box-shadow: 0 0 0 2px #f5842c33 !important;
-}
-
-.custom-select-container .react-select__value-container {
-  padding-left: 8px !important;
-}
-
-.custom-select-container .react-select__single-value {
-  color: #333 !important;
-  font-size: 14px;
-}
-
-.custom-select-container .react-select__placeholder {
-  color: #777 !important;
-}
-
-.custom-select-container .react-select__menu {
-  background-color: #fff !important;
-  color: #000 !important;
-  z-index: 9999;
-  font-size: 14px;
-}
-
-.custom-select-container .react-select__option {
-  padding: 10px !important;
-}
-
-.custom-select-container .react-select__option--is-focused {
-  background-color: #f0f0f0 !important;
-}
-
-.custom-select-container .react-select__option--is-selected {
-  background-color: #f5842c !important;
-  color: white !important;
-}
-
-/* Submit Button */
-.inquiry-form button {
-  background-color: #f5842c;
-  color: #fff;
+  top: 1rem;
+  right: 1rem;
+  background: none;
   border: none;
-  padding: 12px;
-  font-size: 15px;
-  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
   cursor: pointer;
+  color: #a0aec0;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-btn:hover {
+  color: #2d3748;
+}
+
+/* Form title styling */
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Label styling */
+label {
+  display: block;
+  font-size: 0.875rem;
   font-weight: 600;
-  text-transform: uppercase;
-  transition: background-color 0.3s ease;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
 }
 
-.inquiry-form button:hover {
-  background-color: #e5772d;
+/* Input and select field styling */
+input,
+select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #2d3748;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none; /* Removes default Safari styles */
+  -moz-appearance: none;    /* Removes default Firefox styles */
+  appearance: none;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .form-field {
-    flex: 1 1 100%;
-  }
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #63b3ed;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
 
-  .inquiry-form-container {
-    padding: 20px;
-    max-width: 95%;
+/* Select arrow customization */
+select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23a0aec0" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12.5a.5.5 0 0 1-.354-.146l-4-4a.5.5 0 0 1 .708-.708L8 11.293l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.354.146z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
+
+/* Submit button styling */
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 2rem;
+  background: #3182ce; /* Tailwind's blue-600 */
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.submit-btn:hover {
+  background: #2b6cb0; /* Tailwind's blue-700 */
+}
+
+.submit-btn:disabled {
+  background: #a0aec0; /* Tailwind's gray-400 */
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Toastify container to override default styles if needed */
+.Toastify__toast-container {
+  /* You can add custom styles here if you want to override the default Toastify appearance */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 1.5rem;
+    margin: 1rem;
   }
 }

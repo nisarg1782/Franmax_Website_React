@@ -125,6 +125,7 @@ export default function BrandList() {
         },
         body: JSON.stringify({
           name: form.name,
+          user_name: form.user_name,
           mobile: form.mobile,
           email: form.email,
           password: form.password,
@@ -214,6 +215,7 @@ export default function BrandList() {
 
               {[
                 { label: 'Brand Name', name: 'name', type: 'text', placeholder: 'Enter brand name' },
+                  { label: 'User Name', name: 'user_name', type: 'text', placeholder: 'Enter user name' },
                 { label: 'Mobile', name: 'mobile', type: 'text', placeholder: 'Enter mobile number' },
                 { label: 'Email', name: 'email', type: 'email', placeholder: 'Enter email address' },
                 { label: 'Password', name: 'password', type: 'password', placeholder: 'Enter password' }
@@ -331,7 +333,7 @@ export default function BrandList() {
                         </>
                       )}
                     </td>
-                    <td><FaClock className="icon" /> {brand.created_at}</td>
+                    <td><FaClock className="icon" /> {brand.register_at}</td>
                     <td>
                       {editingBrandId === brand.id ? (
                         <>

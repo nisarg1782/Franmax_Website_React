@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Select from 'react-select';
 import { validatePartnerForm } from '../utils/validatePartnerInquiryForm';
 import { getApiUrl } from '../utils/api';
+import ThankYouModal from './ThankYouModal';
+
 
 const Partner = () => {
   const [states, setStates] = useState([]);
@@ -18,6 +20,8 @@ const Partner = () => {
     isFranchise: '', // New field for the franchise option
     message: ''
   });
+  const [showModal, setShowModal] = useState(false);
+
 
   useEffect(() => {
     fetch(getApiUrl('get-indian-states.php'))
@@ -73,6 +77,12 @@ const Partner = () => {
           isFranchise: '', // Reset the new field
           message: ''
         });
+
+          setShowModal(true); // ✅ Show Thank You Modal
+
+          // Auto close after 3s
+        setTimeout(() => setShowModal(false), 3000);
+
       } else {
         toast.error(data.message || "Submission failed.");
       }
@@ -160,6 +170,14 @@ const Partner = () => {
           </div>
           <button type="submit">Submit</button>
         </form>
+
+        {/* ✅ Thank You Modal */}
+      <ThankYouModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        message="Thank you for submitting your business details! Our team will contact you shortly."
+      />
+
       </section>
     </div>
   );

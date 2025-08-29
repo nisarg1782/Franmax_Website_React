@@ -324,8 +324,8 @@ const BrandDetailPage = () => {
             />
           </div>
           <div className="feature-desc">
-            <h3>Key Feature 1</h3>
-            <p>Dynamic description of a key feature or aspect of the brand.</p>
+            <h3>Outlet View</h3>
+            <p>Experience the full potential of your franchise outlet with a detailed visual overview. See how every location reflects the brand’s identity and operational excellence.</p>
           </div>
         </div>
         <div className="feature-row image-left">
@@ -344,14 +344,13 @@ const BrandDetailPage = () => {
             />
           </div>
           <div className="feature-desc">
-            <h3>Key Feature 2</h3>
+            <h3>Signature Products Showcase</h3>
             <p>
-              Another important aspect of the brand's business or support system.
+              Highlight the best-selling products that drive customer demand and brand loyalty. See what keeps your franchise outlets thriving.
             </p>
           </div>
         </div>
       </section>
-
       {/* --- */}
       {/* Why Choose */}
       <section className="why-choose">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getApiUrl } from "../utils/api";
 import "./ConnectMePage.css";
+import ThankYouModal from "../components/ThankYouModal";
 
 const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
   const [states, setStates] = useState([]);
@@ -10,6 +11,7 @@ const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
   const [loadingCities, setLoadingCities] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
+  const [showModal, setShowModal] = useState(false); // For Thank You Modal
 
   const [form, setForm] = useState({
     name: "",
@@ -94,6 +96,12 @@ const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
       if (res.data.success) {
         setServerMessage("Your request has been submitted successfully!");
         setForm({ name: "", email: "", contact: "", stateId: "", cityId: "", message: "" });
+      
+           setShowModal(true); // ✅ Show Thank You Modal
+
+          // Auto close after 3s
+        setTimeout(() => setShowModal(false), 3000);
+      
       } else {
         setServerMessage(res.data.error || "Failed to submit.");
       }
@@ -193,6 +201,14 @@ const ConnectMeModal = ({ show, onClose, brandId, productId }) => {
             {submitting ? "Submitting..." : "Submit"}
           </button>
         </form>
+
+                    {/* ✅ Thank You Modal */}
+      <ThankYouModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        message="Thank you for submitting your business details! Our team will contact you shortly."
+      />
+
       </div>
     </div>
   );

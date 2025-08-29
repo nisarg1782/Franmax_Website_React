@@ -11,6 +11,7 @@ import SuccessModal from './SuccessModal';
 import '../design/InvestorForm.css';
 import PasswordInput from '../PasswordInput';
 import { getApiUrl } from '../../utils/api';
+import ThankYouModal from '../ThankYouModal';
 
 export default function InvestorFormModal({ isOpen, onClose, onBack }) {
   const [states, setStates] = useState([]);
@@ -30,6 +31,8 @@ export default function InvestorFormModal({ isOpen, onClose, onBack }) {
   const [selectedSector, setSelectedSector] = useState(null);
   const [agreed, setAgreed] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetch(getApiUrl('get-indian-states.php'))
@@ -90,6 +93,12 @@ export default function InvestorFormModal({ isOpen, onClose, onBack }) {
 
       if (data.success) {
         toast.success("🚀 Registration successful!");
+      
+        setShowModal(true); // ✅ Show Thank You Modal
+
+          // Auto close after 3s
+        setTimeout(() => setShowModal(false), 3000);
+
       } else {
         toast.error(data.message || "Registration failed.");
       }
@@ -214,6 +223,16 @@ export default function InvestorFormModal({ isOpen, onClose, onBack }) {
               )}
             </div>
           </form>
+
+                  {/* ✅ Thank You Modal */}
+      <ThankYouModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        message="Thank you for submitting your business details! Our team will contact you shortly."
+      />
+
+
+
         </div>
       </div>
     </>

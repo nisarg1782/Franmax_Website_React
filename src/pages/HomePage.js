@@ -23,7 +23,7 @@ function HomePage() {
       
       {/* Trending Franchising Opportunities - View All Link points to category 2 */}
       <TopBrands
-        apiUrl={getApiUrl('get-Top-brands.php')}
+        apiUrl={getApiUrl('get-top-brands.php')}
         sectionTitle="Trending Franchising Opportunities"
         viewAllLink="/franchises/category/3"
       />

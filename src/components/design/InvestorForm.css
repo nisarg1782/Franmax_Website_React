@@ -1,3 +1,4 @@
+/* ===== Existing CSS (kept) ===== */
 .investor-modal-overlay {
   position: fixed;
   top: 0;
@@ -40,6 +41,13 @@
   border-radius: 8px;
   background: #fdfdfd;
   height: 44px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.investor-form-input-with-icon:focus-within,
+.investor-form-select-with-icon:focus-within {
+  border-color: #060644;
+  box-shadow: 0 0 0 2px rgba(6, 6, 68, 0.1);
 }
 
 .investor-form-input-icon {
@@ -96,6 +104,7 @@
   font-size: 14px;
   color: #444;
   margin: 16px 0;
+  line-height: 1.4;
 }
 
 .investor-form-terms-check input[type="checkbox"] {
@@ -120,7 +129,7 @@
   border-radius: 8px;
   color: white;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
 .investor-form-back-btn {
@@ -128,6 +137,7 @@
 }
 .investor-form-back-btn:hover {
   background: #6c757d;
+  transform: translateY(-1px);
 }
 
 .investor-form-submit-btn {
@@ -135,6 +145,7 @@
 }
 .investor-form-submit-btn:hover {
   background: #1f1d48;
+  transform: translateY(-1px);
 }
 
 .investor-modal-close-btn {
@@ -165,4 +176,91 @@
   font-size: 16px;
   cursor: pointer;
   z-index: 10;
+}
+
+/* ====== Improvements Added (without removing anything) ====== */
+
+/* Better placeholder color for readability */
+.investor-form-input-with-icon input::placeholder {
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Smooth focus animation */
+.investor-form-input-with-icon input,
+.investor-form-select-with-icon .react-select__control {
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+/* Buttons look disabled when not active */
+.investor-form-submit-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Responsive improvements */
+@media (max-width: 480px) {
+  .investor-modal-box {
+    width: 95%;
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .investor-modal-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .investor-form-input-with-icon,
+  .investor-form-select-with-icon {
+    height: 40px;
+    margin-bottom: 12px;
+  }
+
+  .investor-form-input-with-icon input,
+  .investor-form-select-with-icon .react-select__control {
+    font-size: 14px;
+  }
+
+  .investor-form-btn-group {
+    flex-direction: column;
+  }
+
+  .investor-form-back-btn,
+  .investor-form-submit-btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .investor-modal-box {
+    width: 85%;
+    max-width: 500px;
+  }
+
+  .investor-modal-title {
+    font-size: 22px;
+  }
+
+  .investor-form-btn-group {
+    gap: 14px;
+  }
+}
+
+@media (min-width: 769px) {
+  .investor-modal-box {
+    width: 70%;
+    max-width: 600px;
+  }
+
+  .investor-modal-title {
+    font-size: 26px;
+  }
+
+  .investor-form-btn-group {
+    gap: 20px;
+  }
 }

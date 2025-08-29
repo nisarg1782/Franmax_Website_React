@@ -17,6 +17,7 @@ const findOption = (options, value) => options.find(opt => opt.value === value);
 
 const validateForm = (form, selectedState, selectedCity, selectedStatus, isEditing) => {
   if (!form.name.trim()) return toast.error("Name is required.") && false;
+  if (!form.user_name.trim()) return toast.error("User Name is required.") && false; // Added validation for user_name
   if (!/^\d{10}$/.test(form.number)) return toast.error("A valid 10-digit mobile number is required.") && false;
   if (!/\S+@\S+\.\S+/.test(form.email)) return toast.error("A valid email address is required.") && false;
   if (!isEditing && (!form.password || form.password.length < 8))
@@ -31,7 +32,7 @@ export default function InvestorModal({ show, onClose, onFormSubmissionSuccess, 
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
 
-  const [form, setForm] = useState({ name: '', number: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', number: '', email: '', password: '', user_name: '' });
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -80,11 +81,12 @@ export default function InvestorModal({ show, onClose, onFormSubmissionSuccess, 
         number: editingInvestor.mobile || '',
         email: editingInvestor.email || '',
         password: '', // Keep password blank on edit
+        user_name: editingInvestor.user_name || ''
       });
       setSelectedState(findOption(states, editingInvestor.state_id));
       setSelectedStatus(findOption(statusOptions, editingInvestor.status));
     } else {
-      setForm({ name: '', number: '', email: '', password: '' });
+      setForm({ name: '', number: '', email: '', password: '', user_name: '' });
       setSelectedState(null);
       setSelectedCity(null);
       setSelectedStatus(null);
@@ -107,8 +109,8 @@ export default function InvestorModal({ show, onClose, onFormSubmissionSuccess, 
       state_id: selectedState.value,
       city_id: selectedCity.value,
       status: selectedStatus.value,
+      user_name: form.user_name,
     };
-
     if (!isEditing) {
       payload.password = form.password;
     } else {
@@ -118,7 +120,7 @@ export default function InvestorModal({ show, onClose, onFormSubmissionSuccess, 
     const endpoint = isEditing
       ? getApiUrl('update-offline-investor.php')
       : getApiUrl('add-offline-investor.php');
-
+    console.log("Submitting to:", endpoint, "with payload:", JSON.stringify(payload));
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -213,6 +215,11 @@ export default function InvestorModal({ show, onClose, onFormSubmissionSuccess, 
                 onChange={setSelectedStatus}
                 placeholder="Select Status"
               />
+            </div>
+            <div className="form-group">
+              <FaUser className="form-icon" />
+              <input type="text" placeholder="User Name" value={form.user_name}
+                onChange={(e) => setForm({ ...form, user_name: e.target.value })} />
             </div>
           </div>
 

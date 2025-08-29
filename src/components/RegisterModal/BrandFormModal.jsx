@@ -12,7 +12,7 @@ import PasswordInput from '../PasswordInput';
 import validateBrandForm from '../../utils/validateBrandForm';
 import '../design/InvestorForm.css'; // This is the correct CSS file to use
 import { getApiUrl } from '../../utils/api';
-
+import ThankYouModal from '../ThankYouModal';
 
 export default function BrandFormModal({ isOpen, onClose, onBack }) {
   const [states, setStates] = useState([]);
@@ -32,6 +32,8 @@ export default function BrandFormModal({ isOpen, onClose, onBack }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [agreed, setAgreed] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetch(getApiUrl('get-indian-states.php'))
@@ -98,7 +100,13 @@ export default function BrandFormModal({ isOpen, onClose, onBack }) {
       if (data.success) {
         // setShowSuccess(true);
          toast.success("🚀 Registration successful!");
-      } else {
+      
+        setShowModal(true); // ✅ Show Thank You Modal
+
+          // Auto close after 3s
+        setTimeout(() => setShowModal(false), 3000);
+
+        } else {
         toast.error(data.message || "Registration failed.");
       }
     } catch (err) {
@@ -221,6 +229,15 @@ export default function BrandFormModal({ isOpen, onClose, onBack }) {
               )}
             </div>
           </form>
+
+        {/* ✅ Thank You Modal */}
+      <ThankYouModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        message="Thank you for submitting your business details! Our team will contact you shortly."
+      />
+
+
         </div>
       </div>
     </>

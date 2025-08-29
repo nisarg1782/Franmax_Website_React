@@ -1,14 +1,14 @@
 // src/components/TopBar.js
-import React, { useState } from 'react';
-import { FaUserPlus, FaSignInAlt } from 'react-icons/fa';
-import LoginModal from './LoginModal/LoginModal';
-import RegisterModal from './RegisterModal/RegisterModal';
-import InvestorFormModal from './RegisterModal/InvestorForm';
-import BrandFormModal from './RegisterModal/BrandFormModal';
-import PartnerFormModal from './RegisterModal/PartnerFormModal';
-import LeasingFormModal from './RegisterModal/LeasingFormModal'; // ✅ NEW
-import './design/Header.css';
-import logo from '../assets/logo/Franmax_logo.png';
+import React, { useState, useCallback } from "react";
+import { FaUserPlus, FaSignInAlt } from "react-icons/fa";
+import LoginModal from "./LoginModal/LoginModal";
+import RegisterModal from "./RegisterModal/RegisterModal";
+import InvestorFormModal from "./RegisterModal/InvestorForm";
+import BrandFormModal from "./RegisterModal/BrandFormModal";
+import PartnerFormModal from "./RegisterModal/PartnerFormModal";
+import LeasingFormModal from "./RegisterModal/LeasingFormModal"; // ✅ NEW
+import "./design/Header.css";
+import logo from "../assets/logo/Franmax_logo.png";
 
 export default function TopBar() {
   const [showLogin, setShowLogin] = useState(false);
@@ -18,56 +18,67 @@ export default function TopBar() {
   const [showPartnerModal, setShowPartnerModal] = useState(false);
   const [showLeasingModal, setShowLeasingModal] = useState(false); // ✅ NEW
 
-  const handleOpenRegister = () => {
+  // 🔹 Centralized handlers with useCallback for performance
+  const handleOpenRegister = useCallback(() => {
     setShowLogin(false);
     setIsRegisterOpen(true);
-  };
+  }, []);
 
-  const handleOpenLogin = () => {
+  const handleOpenLogin = useCallback(() => {
     setIsRegisterOpen(false);
     setShowLogin(true);
-  };
+  }, []);
 
-  const handleOpenInvestor = () => {
+  const handleOpenInvestor = useCallback(() => {
     setIsRegisterOpen(false);
     setShowInvestorModal(true);
-  };
+  }, []);
 
-  const handleOpenBrand = () => {
+  const handleOpenBrand = useCallback(() => {
     setIsRegisterOpen(false);
     setShowBrandModal(true);
-  };
+  }, []);
 
-  const handleOpenPartner = () => {
+  const handleOpenPartner = useCallback(() => {
     setIsRegisterOpen(false);
     setShowPartnerModal(true);
-  };
+  }, []);
 
-  const handleOpenLeasing = () => {
+  const handleOpenLeasing = useCallback(() => {
     setIsRegisterOpen(false);
     setShowLeasingModal(true);
-  };
+  }, []);
 
   return (
     <>
-      <div className="top-bar">
+      {/* ✅ Top Navigation Bar */}
+      <header className="top-bar">
+        {/* Logo Section */}
         <div className="top-left">
-          <img
-            src={logo}
-            alt="Logo"
-            className="logo-img"
-          />
+          <a href="/" aria-label="Franmax Home">
+            <img src={logo} alt="Franmax Logo" className="logo-img" />
+          </a>
         </div>
-        <div className="top-right">
-          <button className="top-link-button" onClick={handleOpenRegister}>
-            <FaUserPlus /> Register
+
+        {/* Right Section (Auth Actions) */}
+        <nav className="top-right" aria-label="User actions">
+          <button
+            className="top-link-button"
+            onClick={handleOpenRegister}
+            aria-label="Open registration"
+          >
+            <FaUserPlus aria-hidden="true" /> Register
           </button>
 
-          <button className="top-link-button" onClick={handleOpenLogin}>
-            <FaSignInAlt /> Login
+          <button
+            className="top-link-button"
+            onClick={handleOpenLogin}
+            aria-label="Open login"
+          >
+            <FaSignInAlt aria-hidden="true" /> Login
           </button>
-        </div>
-      </div>
+        </nav>
+      </header>
 
       {/* 🔐 Login Modal */}
       <LoginModal
@@ -84,7 +95,7 @@ export default function TopBar() {
         openInvestor={handleOpenInvestor}
         openBrand={handleOpenBrand}
         openPartner={handleOpenPartner}
-        openLeasing={handleOpenLeasing} // ✅ Pass leasing modal trigger
+        openLeasing={handleOpenLeasing} // ✅ Leasing trigger
       />
 
       {/* 👤 Investor Registration */}
@@ -124,6 +135,10 @@ export default function TopBar() {
       <LeasingFormModal
         isOpen={showLeasingModal}
         onClose={() => setShowLeasingModal(false)}
+        onBack={() => {
+          setShowLeasingModal(false);
+          setIsRegisterOpen(true);
+        }}
       />
     </>
   );

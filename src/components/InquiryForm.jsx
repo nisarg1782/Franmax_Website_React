@@ -119,8 +119,8 @@ const InquiryForm = ({ submitUrl, showModal, onClose }) => {
       name: form.name,
       email: form.email,
       contact: form.contact,
-      stateId: form.stateId,
-      cityId: form.cityId,
+      state_id: form.stateId,
+      city_id: form.cityId,
       service_type: serviceType,
     };
 
@@ -156,6 +156,7 @@ const InquiryForm = ({ submitUrl, showModal, onClose }) => {
 
   return (
     <div className="form-container">
+      <button type="button" className="close-btn" onClick={onClose}>×</button>
       <h2>{serviceType} Inquiry Form</h2>
       <form onSubmit={onSubmit} noValidate>
         <label>Name*</label>

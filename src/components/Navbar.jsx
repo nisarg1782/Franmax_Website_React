@@ -1,23 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import TabFilters from './TabFilters';
-import SideMenu from './sidemenu/SideMenuTabs';
-import './design/Header.css';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
+import TabFilters from "./TabFilters";
+import SideMenu from "./sidemenu/SideMenuTabs";
+import "./design/Header.css";
 
 const servicesSubmenu = [
-  {
-    name: 'Consulting',
-    path: '/consulting',
-
-  },
-  {
-    name: 'Franchise Expansion',
-    path: '/franchise',
-
-  },
-  { name: 'Business Exchange', path: '/sell-business' },
-  { name: 'Real Estate', path: '/lease-property' },
-  { name: 'Marketing', path: '/marketing' },
+  { name: "Consulting", path: "/consulting" },
+  { name: "Franchise Expansion", path: "/franchise" },
+  { name: "Business Exchange", path: "/sell-business" },
+  { name: "Real Estate", path: "/lease-property" },
+  { name: "Marketing", path: "/marketing" },
 ];
 
 function Navbar() {
@@ -34,19 +26,17 @@ function Navbar() {
         setActiveDropdown(null);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   // Toggles the main "Services" dropdown
   const toggleServicesDropdown = useCallback(() => {
-    // If the main menu is open, close it. Otherwise, open it.
-    setActiveDropdown(prev => (prev === 'services' ? null : 'services'));
+    setActiveDropdown((prev) => (prev === "services" ? null : "services"));
   }, []);
 
-  // Use useCallback for functions passed as props to children
   const handleCloseSideMenu = useCallback(() => {
     setShowMenu(false);
   }, []);
@@ -63,20 +53,40 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="nav-left">
-          <div className="hamburger-icon" onClick={() => setShowMenu(true)}>☰</div>
-          <Link to="/" className="nav-icon">🏠</Link>
+          {/* Hamburger (Mobile) */}
+          <div
+            className="hamburger-icon"
+            onClick={() => setShowMenu(true)}
+            role="button"
+            aria-label="Open menu"
+          >
+            ☰
+          </div>
+
+          {/* Main Links */}
+          <Link to="/" className="nav-icon">
+            🏠
+          </Link>
           <Link to="/sell-business">Sell Business</Link>
           <Link to="/lease-property">Lease Property</Link>
           <Link to="/partner">Become Partner</Link>
           <Link to="/faqs">FAQ</Link>
-          <Link to="https://www.franxpo.com">Events</Link>
-          {/* <Link to="/marketing">Marketing</Link> */}
+
+          {/* External Link - use <a> for external site */}
+          <a
+            href="https://www.franxpo.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Events
+          </a>
 
           {/* Services Dropdown */}
           <div className="services-dropdown-wrapper" ref={dropdownRef}>
             <span
               className="dropdown-trigger"
               onClick={toggleServicesDropdown}
+              role="button"
             >
               Services ▾
             </span>
@@ -90,14 +100,17 @@ function Navbar() {
                       onClick={(e) => {
                         if (item.submenu) {
                           e.preventDefault();
-                          // Toggle between this submenu's name and 'services' (to keep main menu open)
-                          setActiveDropdown(activeDropdown === item.name ? 'services' : item.name);
+                          setActiveDropdown(
+                            activeDropdown === item.name
+                              ? "services"
+                              : item.name
+                          );
                         } else {
-                          setActiveDropdown(null); // Closes all dropdowns
+                          setActiveDropdown(null);
                         }
                       }}
                     >
-                      {item.name} {item.submenu ? '▸' : ''}
+                      {item.name} {item.submenu ? "▸" : ""}
                     </Link>
                     {activeDropdown === item.name && item.submenu && (
                       <div className="submenu">
@@ -120,8 +133,16 @@ function Navbar() {
           </div>
         </div>
 
+        {/* Right Section */}
         <div className="nav-right">
-          <div className="nav-search-icon" onClick={handleOpenModal}>🔍</div>
+          <div
+            className="nav-search-icon"
+            onClick={handleOpenModal}
+            role="button"
+            aria-label="Open search"
+          >
+            🔍
+          </div>
         </div>
       </nav>
 
@@ -129,7 +150,9 @@ function Navbar() {
       {showModal && (
         <div className="search-modal-overlay">
           <div className="search-modal">
-            <button className="close-modal" onClick={handleCloseModal}>✖</button>
+            <button className="close-modal" onClick={handleCloseModal}>
+              ✖
+            </button>
             <TabFilters />
           </div>
         </div>

@@ -9,6 +9,8 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { getApiUrl } from '../utils/api';
 
 import './design/Marketing.css';
+import ThankYouModal from './ThankYouModal';
+
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -31,6 +33,8 @@ const Marketing = () => {
     "Branding", "Page Optimization", "Brochure Designing", "Personal branding",
     "Linkedln management", "Google my business", "AD (duration 50 sec- 1 min)"
   ];
+
+  const [showModal, setShowModal] = useState(false);
 
   const chartData = {
     labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'],
@@ -134,6 +138,13 @@ const Marketing = () => {
             contact: '',
             services: []
           });
+       
+         setShowModal(true); // ✅ Show Thank You Modal
+
+          // Auto close after 3s
+        setTimeout(() => setShowModal(false), 3000);
+
+       
         } else if (data.errors) {
           data.errors.forEach(err => toast.error(err));
         } else {
@@ -281,6 +292,16 @@ const Marketing = () => {
             </div>
             <button type="submit">Submit</button>
           </form>
+
+
+                  {/* ✅ Thank You Modal */}
+      <ThankYouModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        message="Thank you for submitting your business details! Our team will contact you shortly."
+      />
+
+
         </section>
       </div>
     </>

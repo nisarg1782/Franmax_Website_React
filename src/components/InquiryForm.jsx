@@ -156,8 +156,10 @@ const InquiryForm = ({ submitUrl, showModal, onClose }) => {
 
   return (
     <div className="form-container">
-      <button type="button" className="close-btn" onClick={onClose}>×</button>
       <h2>{serviceType} Inquiry Form</h2>
+      <div className="close-info">
+  ⚠ Click outside the form to close
+</div>
       <form onSubmit={onSubmit} noValidate>
         <label>Name*</label>
         <input

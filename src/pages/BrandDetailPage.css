@@ -92,9 +92,9 @@
 }
 
 .main-image img {
-  width: auto;
+  width:85%;
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
   object-position: center;
   transition: transform 0.5s ease;
   border-radius: 16px;
@@ -386,7 +386,7 @@
 
 .unit-card img {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: contain;
   object-position: center;
   border-radius: 12px;

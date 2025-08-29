@@ -10,9 +10,10 @@ const WhatsAppIcon = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
+      role="button"
+      title="Chat on WhatsApp"
     >
       <FaWhatsapp className="whatsapp-icon-svg" />
-      <span className="whatsapp-text">Chat with me</span>
     </a>
   );
 };

@@ -1,155 +1,179 @@
-/* Wrapper */
+/* ====== Main Wrapper ====== */
 .syb-wrapper {
-  padding: 50px 20px;
   max-width: 1200px;
-  margin: auto;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #fff;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Heading Row */
+/* ====== Heading Row ====== */
 .syb-heading-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .syb-heading {
-  font-size: 28px;
+  font-size: 1.6rem; /* slightly smaller for professional look */
   font-weight: 700;
-  color: #060644;
+  color: #222;
+  margin: 0;
 }
 
 .syb-view-all {
-  font-size: 16px;
-  font-weight: 500;
-  color: #f97316;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.syb-view-all:hover {
-  color: #d6551a;
-}
-
-/* Grid Layout */
-.syb-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
-
-/* Individual Card */
-.syb-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
-  width: 280px;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-  overflow: hidden;
-}
-
-.syb-card:hover {
-  transform: translateY(-5px);
-}
-
-/* Image Wrap */
-.syb-img-wrap {
-  height: 150px;
-  background: #f9f9f9;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-.syb-img-wrap img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-/* Card Content */
-.syb-content {
-  padding: 16px;
-  text-align: center;
-}
-
-/* Detail Fields */
-.syb-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  text-align: left;
-  font-size: 14px;
-  margin-bottom: 12px;
-}
-
-.biz-field {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.label {
-  font-weight: 600;
-  color: #333;
-  flex: 1;
-}
-
-.value {
-  flex: 2;
-  text-align: right;
-  color: #555;
-  word-break: break-word;
-}
-
-/* Button */
-.syb-btn {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background: transparent;
-  border: 1px solid #f97316;
-  color: #f97316;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.syb-btn:hover {
-  background: #f97316;
-  color: #fff;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .syb-grid {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .syb-card {
-    width: 90%;
-  }
-}
-.syb-view-all {
-  font-size: 15px;
+ font-size: 15px;
   color: #f5842c;
   font-weight: 600;
   text-decoration: none;
   border: 1px solid #f5842c;
   padding: 6px 14px;
   border-radius: 6px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  display: inline-block;
 }
+
 .syb-view-all:hover {
-  background-color: #f5842c;
+   background-color: #f5842c;
   color: #fff;
+  box-shadow: 0 4px 12px rgba(245, 132, 44, 0.3);
+  transform: translateY(-2px);
 }
 
+/* ====== Grid for Desktop ====== */
+.syb-grid {
+  display: flex;
+  gap: 20px;
+  overflow: hidden; /* hide scrollbars for carousel effect */
+  position: relative;
+}
 
+/* ====== Card ====== */
+.syb-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  flex: 0 0 250px; /* smaller card width for desktop */
+}
+
+.syb-card:hover {
+  transform: translateY(-5px);
+}
+
+/* ====== Image Wrap ====== */
+.syb-img-wrap {
+  width: 100%;
+  height: 160px; /* slightly smaller */
+  overflow: hidden;
+}
+
+.syb-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  transition: transform 0.3s ease;
+}
+
+.syb-card:hover .syb-img-wrap img {
+  transform: scale(1.05);
+}
+
+/* ====== Content ====== */
+.syb-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.syb-detail {
+  margin-bottom: 10px;
+}
+
+.biz-field {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.biz-field .label {
+  font-weight: 600;
+  color: #444;
+}
+
+.biz-field .value {
+  color: #666;
+  text-align: right;
+}
+
+/* ====== Button ====== */
+.syb-btn {
+  background: #0077ff;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.syb-btn:hover {
+  background: #0056cc;
+}
+
+/* ====== Animation: infinite slide ====== */
+@keyframes slideInfinite {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.syb-grid.auto-slide {
+  animation: slideInfinite 30s linear infinite;
+}
+
+/* ====== Tablet View ====== */
+@media (max-width: 991px) {
+  .syb-grid {
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .syb-card {
+    flex: 0 0 70%;
+    scroll-snap-align: start;
+    min-width: 280px;
+    max-width: 350px;
+  }
+}
+
+/* ====== Mobile View ====== */
+@media (max-width: 600px) {
+  .syb-card {
+    flex: 0 0 85%;
+    min-width: 240px;
+  }
+
+  .syb-heading {
+    font-size: 1.4rem;
+  }
+}
+
+/* ====== Hide Scrollbars for Carousel ====== */
+.syb-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.syb-grid {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;      /* Firefox */
+}

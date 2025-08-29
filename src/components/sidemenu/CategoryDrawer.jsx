@@ -25,7 +25,8 @@ export default function CategoryDrawer() {
   useEffect(() => {
     fetch(getApiUrl("get-master-category.php"))
       .then((res) => res.json())
-      .then((data) => Array.isArray(data) && setMasterCategories(data));
+      .then((data) => Array.isArray(data) && setMasterCategories(data))
+      .catch((err) => console.error("Master Category API error:", err));
   }, []);
 
   const saveSelection = ({ masterId, categoryId, subcategoryId }) => {
@@ -47,14 +48,14 @@ export default function CategoryDrawer() {
 
     navigate(`/category?mas_cat=${master.mas_cat_id}`);
 
-    if (!categories[master.mas_cat_id]) {
-      fetch(
-        getApiUrl(`get-category.php?mas_cat_id=${master.mas_cat_id}`)
-      )
+    if (!categories[master.mas_cat_id] || categories[master.mas_cat_id].length === 0) {
+      fetch(getApiUrl(`get-category.php?mas_cat_id=${master.mas_cat_id}`))
         .then((res) => res.json())
         .then((data) => {
-          setCategories((prev) => ({ ...prev, [master.mas_cat_id]: data }));
-        });
+          const list = Array.isArray(data) ? data : data.data || [];
+          setCategories((prev) => ({ ...prev, [master.mas_cat_id]: list }));
+        })
+        .catch((err) => console.error("Category API error:", err));
     }
   };
 
@@ -69,12 +70,14 @@ export default function CategoryDrawer() {
 
     navigate(`/category?mas_cat=${selectedMaster?.mas_cat_id}&cat=${cat.cat_id}`);
 
-    if (!subcategories[cat.cat_id]) {
+    if (!subcategories[cat.cat_id] || subcategories[cat.cat_id].length === 0) {
       fetch(getApiUrl(`get-sub-category.php?cat_id=${cat.cat_id}`))
         .then((res) => res.json())
         .then((data) => {
-          setSubcategories((prev) => ({ ...prev, [cat.cat_id]: data }));
-        });
+          const list = Array.isArray(data) ? data : data.data || [];
+          setSubcategories((prev) => ({ ...prev, [cat.cat_id]: list }));
+        })
+        .catch((err) => console.error("Subcategory API error:", err));
     }
   };
 
@@ -97,7 +100,7 @@ export default function CategoryDrawer() {
     else if (activePanel === "category") setActivePanel("master");
   };
 
-  // Filter logic
+  // Filtered & displayed lists
   const filteredMasters = masterCategories.filter((cat) =>
     cat.mas_cat_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -113,10 +116,17 @@ export default function CategoryDrawer() {
   const filteredSubcategories = subcategoryList.filter((sub) =>
     sub.subcat_name.toLowerCase().includes(subSearch.toLowerCase())
   );
-  const displayedSubcategories = filteredSubcategories.slice(
-    0,
-    visibleSubcategories
-  );
+  const displayedSubcategories = filteredSubcategories.slice(0, visibleSubcategories);
+
+  // Inline style for clickable items
+  const clickableItemStyle = {
+    padding: "8px 12px",
+    cursor: "pointer",
+    fontWeight: 500,
+    color: "#060644",
+    borderBottom: "1px solid #eee",
+    listStyle: "none",
+  };
 
   return (
     <div className="drawer-container">
@@ -132,16 +142,25 @@ export default function CategoryDrawer() {
             setVisibleMasters(4);
           }}
         />
-        <ul>
+        <ul style={{ padding: 0, margin: 0 }}>
           {displayedMasters.map((master) => (
             <li
               key={master.mas_cat_id}
+              style={clickableItemStyle}
               onClick={() => handleMasterClick(master)}
             >
               {master.mas_cat_name} ›
             </li>
           ))}
         </ul>
+        {visibleMasters < filteredMasters.length && (
+          <button
+            className="load-more-btn"
+            onClick={() => setVisibleMasters(filteredMasters.length)}
+          >
+            Load More
+          </button>
+        )}
       </div>
 
       {/* CATEGORY PANEL */}
@@ -157,13 +176,25 @@ export default function CategoryDrawer() {
             setVisibleCategories(4);
           }}
         />
-        <ul>
+        <ul style={{ padding: 0, margin: 0 }}>
           {displayedCategories.map((cat) => (
-            <li key={cat.cat_id} onClick={() => handleCategoryClick(cat)}>
+            <li
+              key={cat.cat_id}
+              style={clickableItemStyle}
+              onClick={() => handleCategoryClick(cat)}
+            >
               {cat.cat_name} ›
             </li>
           ))}
         </ul>
+        {visibleCategories < filteredCategories.length && (
+          <button
+            className="load-more-btn"
+            onClick={() => setVisibleCategories(filteredCategories.length)}
+          >
+            Load More
+          </button>
+        )}
       </div>
 
       {/* SUBCATEGORY PANEL */}
@@ -179,21 +210,25 @@ export default function CategoryDrawer() {
             setVisibleSubcategories(4);
           }}
         />
-        <ul>
+        <ul style={{ padding: 0, margin: 0 }}>
           {displayedSubcategories.map((sub) => (
-            <li key={sub.subcat_id}>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSubcategoryClick(sub);
-                }}
-              >
-                {sub.subcat_name}
-              </a>
+            <li
+              key={sub.subcat_id}
+              style={clickableItemStyle}
+              onClick={() => handleSubcategoryClick(sub)}
+            >
+              {sub.subcat_name}
             </li>
           ))}
         </ul>
+        {visibleSubcategories < filteredSubcategories.length && (
+          <button
+            className="load-more-btn"
+            onClick={() => setVisibleSubcategories(filteredSubcategories.length)}
+          >
+            Load More
+          </button>
+        )}
       </div>
     </div>
   );

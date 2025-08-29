@@ -1,123 +1,131 @@
-/*
-  InquiryForm.css - Styles for the InquiryForm React component.
-  This file provides a clean, modern, and responsive design for the form.
-*/
-
-/* General container styling for the form */
+/* ===================== Main Container ===================== */
 .form-container {
-  font-family: 'Inter', sans-serif;
-  background: #f7fafc; /* Light gray background */
-  padding: 2.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
   max-width: 500px;
-  margin: 2rem auto;
-  position: relative;
-  border: 1px solid #e2e8f0;
+  width: 90%;
+  margin: 30px auto;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
 }
 
-/* Close button for modals */
-.close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  color: #a0aec0;
-  transition: color 0.2s ease-in-out;
-}
-
-.close-btn:hover {
-  color: #2d3748;
-}
-
-/* Form title styling */
-h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1a202c;
-  margin-bottom: 2rem;
+/* ===================== Form Heading ===================== */
+.form-container h2 {
   text-align: center;
+  font-size: 2rem;
+  margin-bottom: 25px;
+  color: #333;
 }
 
-/* Label styling */
-label {
-  display: block;
-  font-size: 0.875rem;
+/* ===================== Click Outside Info ===================== */
+.close-info {
+  text-align: center;
+  color: #d32f2f; /* bright red */
   font-weight: 600;
-  color: #4a5568;
-  margin-bottom: 0.5rem;
-  margin-top: 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
 }
 
-/* Input and select field styling */
-input,
-select {
+/* ===================== Labels ===================== */
+.form-container label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #555;
+  margin-top: 15px;
+}
+
+/* ===================== Inputs & Selects ===================== */
+.form-container input,
+.form-container select {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 12px 14px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   font-size: 1rem;
-  border: 1px solid #cbd5e0;
-  border-radius: 0.5rem;
-  background: #fff;
-  color: #2d3748;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  -webkit-appearance: none; /* Removes default Safari styles */
-  -moz-appearance: none;    /* Removes default Firefox styles */
-  appearance: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
 }
 
-input:focus,
-select:focus {
+.form-container input:focus,
+.form-container select:focus {
   outline: none;
-  border-color: #63b3ed;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
 }
 
-/* Select arrow customization */
-select {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23a0aec0" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 12.5a.5.5 0 0 1-.354-.146l-4-4a.5.5 0 0 1 .708-.708L8 11.293l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.354.146z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-}
-
-/* Submit button styling */
+/* ===================== Submit Button ===================== */
 .submit-btn {
   width: 100%;
-  padding: 1rem;
-  margin-top: 2rem;
-  background: #3182ce; /* Tailwind's blue-600 */
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 14px;
+  margin-top: 25px;
+  background-color: #007bff;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
 }
 
 .submit-btn:hover {
-  background: #2b6cb0; /* Tailwind's blue-700 */
+  background-color: #0056b3;
 }
 
 .submit-btn:disabled {
-  background: #a0aec0; /* Tailwind's gray-400 */
+  background-color: #999;
   cursor: not-allowed;
-  box-shadow: none;
 }
 
-/* Toastify container to override default styles if needed */
+/* ===================== Toastify Custom Positioning ===================== */
 .Toastify__toast-container {
-  /* You can add custom styles here if you want to override the default Toastify appearance */
+  font-size: 0.9rem;
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 600px) {
+/* ===================== Mobile Responsive ===================== */
+@media (max-width: 768px) {
   .form-container {
-    padding: 1.5rem;
-    margin: 1rem;
+    padding: 25px 20px;
+    width: 95%;
   }
+
+  .form-container h2 {
+    font-size: 1.7rem;
+  }
+
+  .submit-btn {
+    padding: 12px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 20px 15px;
+  }
+
+  .form-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-container input,
+  .form-container select {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  .submit-btn {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ===================== Optional: Smooth Input Transition ===================== */
+.form-container input,
+.form-container select,
+.submit-btn {
+  transition: all 0.3s ease-in-out;
 }
